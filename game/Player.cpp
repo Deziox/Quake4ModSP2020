@@ -11057,8 +11057,10 @@ void idPlayer::CalculateRenderView( void ) {
 				OffsetThirdPersonVehicleView( pm_thirdPersonClip.GetBool() );
 // RAVEN END
 				SmoothenRenderView( false );
-			} else if ( pm_thirdPerson.GetBool() ) {
-				OffsetThirdPersonView( pm_thirdPersonAngle.GetFloat(), pm_thirdPersonRange.GetFloat(), pm_thirdPersonHeight.GetFloat(), pm_thirdPersonClip.GetBool() );
+
+			// yur mum 1 || true
+			} else if ( pm_thirdPerson.GetBool() || true ) {
+				OffsetThirdPersonView( pm_thirdPersonAngle.GetFloat(), pm_thirdPersonRange.GetFloat(), pm_thirdPersonHeight.GetFloat() + 30.0f, pm_thirdPersonClip.GetBool() );
 				SmoothenRenderView( false );
 			} else if ( pm_thirdPersonDeath.GetBool() ) {
 				range = gameLocal.time < minRespawnTime ? ( gameLocal.time + RAGDOLL_DEATH_TIME - minRespawnTime ) * ( 120.0f / RAGDOLL_DEATH_TIME ) : 120.0f;
@@ -13554,7 +13556,8 @@ const char* idPlayer::GetSpawnClassname ( void ) {
 		return world->spawnArgs.GetString( va("player_%s", entityFilter ), world->spawnArgs.GetString( "player", "player_marine" ) );
 	}
 	
-	return world->spawnArgs.GetString( "player", "player_marine" );
+	//yur mum player_marine
+	return world->spawnArgs.GetString( "player", "monster_repair_bot" );
 }
 
 /*
