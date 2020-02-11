@@ -73,6 +73,8 @@ const int	POWERUP_BLINK_TIME	= 1000;			// Time between powerup wear off sounds
 const float MIN_BOB_SPEED		= 5.0f;			// minimum speed to bob and play run/walk animations at
 const int	MAX_RESPAWN_TIME	= 10000;
 const int	RAGDOLL_DEATH_TIME	= 3000;
+int			jumpCount			= 0;
+
 #ifdef _XENON
 	const int	RAGDOLL_DEATH_TIME_XEN_SP	= 1000;
 	const int	MAX_RESPAWN_TIME_XEN_SP	= 3000;
@@ -3025,9 +3027,11 @@ void idPlayer::UpdateModelSetup( bool forceReload ) {
 	const char* defaultModel = NULL;
 	const char* newModelName = NULL;
 
+	/*yur mum begin
 	if( !gameLocal.isMultiplayer || spectating ) {
+		gameLocal.Printf("UPDATE MODEL SETUP RETURN TEST");
 		return;
-	}
+	}yur mum end*/
 
 	if( gameLocal.IsTeamGame() ) {
 		defaultModel = spawnArgs.GetString( va( "def_default_model_%s", idMultiplayerGame::teamNames[ team ] ), NULL );
@@ -3041,6 +3045,7 @@ void idPlayer::UpdateModelSetup( bool forceReload ) {
 			newModelName = GetUserInfo()->GetString( uiKeyName );
 		}
 	} else {
+		
 		defaultModel = spawnArgs.GetString( "def_default_model" );
 
 		if( g_forceModel.GetString()[ 0 ] ) {
@@ -3061,7 +3066,7 @@ void idPlayer::UpdateModelSetup( bool forceReload ) {
 	}
 
 	rvDeclPlayerModel* model = (rvDeclPlayerModel*)declManager->FindType( DECL_PLAYER_MODEL, newModelName, false );
-
+	
 	// validate that the model they've selected is OK for this team game
 	if( gameLocal.IsTeamGame() && model ) {
 		if( idStr::Icmp( model->team, idMultiplayerGame::teamNames[ team ] ) ) {
@@ -3074,10 +3079,12 @@ void idPlayer::UpdateModelSetup( bool forceReload ) {
 		}
 	} 
 
+	
+
 	// check to see if the user-specified ui_model/ui_model_strogg/ui_model_marine is valid
 	if( !model ) {
+		
 		newModelName = defaultModel;
-
 		model = (rvDeclPlayerModel*)declManager->FindType( DECL_PLAYER_MODEL, newModelName, false );
 		if( !model ) {
 			gameLocal.Error( "idPlayer::UpdateModelSetup() - Can't find default model (%s)\n", defaultModel );
@@ -9044,7 +9051,7 @@ void idPlayer::Move( void ) {
 		pfl.crouch	= physicsObj.IsCrouching();
 		pfl.onGround	= physicsObj.HasGroundContacts();
 		pfl.onLadder	= physicsObj.OnLadder();
-		pfl.jump		= physicsObj.HasJumped();
+		pfl.jump        = physicsObj.HasJumped();
 
  		// check if we're standing on top of a monster and give a push if we are
  		idEntity *groundEnt = physicsObj.GetGroundEntity();
@@ -9065,7 +9072,8 @@ void idPlayer::Move( void ) {
  		}
 	}
 
-	if ( pfl.jump ) {
+	if ( pfl.jump && jumpCount < 5 ) {
+		gameLocal.Printf("Jumped %d times", ++jumpCount);
 		loggedAccel_t	*acc = &loggedAccel[currentLoggedAccel&(NUM_LOGGED_ACCELS-1)];
 		currentLoggedAccel++;
 		acc->time = gameLocal.time;
@@ -9230,7 +9238,7 @@ void idPlayer::LoadDeferredModel( void ) {
 		gameLocal.Warning( "idPlayer::LoadDeferredModel() - reloadModel without vaid modelDict\n" );
 		return;
 	} 
-
+	//yus found the hole gameLocal.Printf("test 1 deferredmodel");
 	SetAnimState( ANIMCHANNEL_TORSO, "Torso_Idle", 0 );
 	SetAnimState( ANIMCHANNEL_LEGS, "Legs_Idle", 0 );
 	UpdateState();
@@ -13440,8 +13448,8 @@ void idPlayer::SetupHead( const char* headModel, idVec3 headOffset ) {
 			clientHead = headEnt;
 		}
 	} else {
+		gameLocal.Printf("test 1 headsetup");
 		idActor::SetupHead( headModel, headOffset );
-
 		if ( head ) {
 			head->fl.persistAcrossInstances = true;
 		}

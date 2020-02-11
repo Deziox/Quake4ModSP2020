@@ -1274,6 +1274,8 @@ idPhysics_Player::CheckJump
 bool idPhysics_Player::CheckJump( void ) {
 	idVec3 addVelocity;
 
+	
+
 	if ( command.upmove < 10 ) {
 		// not holding jump
 		return false;
@@ -1611,7 +1613,7 @@ int idPhysics_Player::GetWaterType( void ) const {
 idPhysics_Player::HasJumped
 ================
 */
-bool idPhysics_Player::HasJumped( void ) const {
+bool idPhysics_Player::HasJumped(void) const {
 	return ( ( current.movementFlags & PMF_JUMPED ) != 0 );
 }
 
@@ -1883,6 +1885,7 @@ void idPhysics_Player::SetDebugLevel( bool set ) {
 idPhysics_Player::Evaluate
 ================
 */
+//yur dad
 bool idPhysics_Player::Evaluate( int timeStepMSec, int endTimeMSec ) {
 	idVec3 masterOrigin, oldOrigin;
 	idMat3 masterAxis;
