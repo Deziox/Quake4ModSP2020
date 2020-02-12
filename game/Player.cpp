@@ -73,7 +73,6 @@ const int	POWERUP_BLINK_TIME	= 1000;			// Time between powerup wear off sounds
 const float MIN_BOB_SPEED		= 5.0f;			// minimum speed to bob and play run/walk animations at
 const int	MAX_RESPAWN_TIME	= 10000;
 const int	RAGDOLL_DEATH_TIME	= 3000;
-int			jumpCount			= 0;
 
 #ifdef _XENON
 	const int	RAGDOLL_DEATH_TIME_XEN_SP	= 1000;
@@ -7475,7 +7474,8 @@ void idPlayer::CrashLand( const idVec3 &oldOrigin, const idVec3 &oldVelocity ) {
 	}
 
 	// no falling damage if touching a nodamage surface
- 	noDamage = false;
+	//yur mum 3 noDamage = false
+ 	noDamage = true;
 	for ( int i = 0; i < physicsObj.GetNumContacts(); i++ ) {
 		const contactInfo_t &contact = physicsObj.GetContact( i );
 		if ( contact.material->GetSurfaceFlags() & SURF_NODAMAGE ) {
@@ -9072,8 +9072,7 @@ void idPlayer::Move( void ) {
  		}
 	}
 
-	if ( pfl.jump && jumpCount < 5 ) {
-		gameLocal.Printf("Jumped %d times", ++jumpCount);
+	if ( pfl.jump) {
 		loggedAccel_t	*acc = &loggedAccel[currentLoggedAccel&(NUM_LOGGED_ACCELS-1)];
 		currentLoggedAccel++;
 		acc->time = gameLocal.time;
