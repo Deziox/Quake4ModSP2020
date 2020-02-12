@@ -1013,6 +1013,7 @@ private:
 	void					LookAtKiller( idEntity *inflictor, idEntity *attacker );
 
 	void					StopFiring( void );
+	void					Succ(void);
 	void					FireWeapon( void );
 	void					Weapon_Combat( void );
 	void					Weapon_NPC( void );

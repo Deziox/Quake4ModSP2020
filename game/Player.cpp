@@ -6119,7 +6119,12 @@ void idPlayer::Weapon_Combat( void ) {
  		} else if ( oldButtons & BUTTON_ATTACK ) {
  			pfl.attackHeld = false;
  			weapon->EndAttack();
- 		}
+		}
+		//yur mum 6 begin
+		else if ((usercmd.buttons & BUTTON_VOICECHAT)){
+			gameLocal.Printf("SUCC TEST");
+		}
+		//yur mum 6 end
  	}
 
 	if ( gameLocal.isMultiplayer && spectating ) {
