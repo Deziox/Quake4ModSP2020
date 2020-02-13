@@ -6124,7 +6124,7 @@ void idPlayer::Weapon_Combat( void ) {
 		else if ((usercmd.buttons & BUTTON_VOICECHAT)){
 			gameLocal.Printf("SUCC TEST");
 			//yur dad gameLocal.push.ClipPush looks like there is a ray trace version of the push, this seems like a better version of the push.
-			gameLocal.RadiusPush(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), 100.0f, -100000.0f, this, this, 1.0f, false);
+			gameLocal.RadiusPush(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + idVec3(0,20.0f,-10.0f), 200.0f, -10000.0f, this, this, 1.0f, false);			
 		}
 		//yur mum 6 end
  	}
