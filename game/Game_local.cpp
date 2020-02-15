@@ -5931,7 +5931,7 @@ void idGameLocal::RadiusPushClipModel( idEntity* inflictor, const idVec3 &origin
 		//impulse = idVec3( 0.0, 0.0, 1.0 );
 		//yur mum 2 begin
 		if (inflictor->GetClassname() == gameLocal.GetLocalPlayer()->GetClassname()){
-			gameLocal.Printf("RadiusPushClipModel test %s\t%s\n", clipModel->GetEntity()->GetEntityDefName(), clipModel->GetEntity()->GetClassname());
+			gameLocal.Printf("RadiusPushClipModel test %s\t%s\t%s\n", clipModel->GetEntity()->GetEntityDefName(), clipModel->GetEntity()->GetClassname(),clipModel->GetEntity()->GetSuperclass());
 			gameLocal.Printf("local idPlayer is sucking\n");
 
 			idEntity* suckee = clipModel->GetEntity();
@@ -5940,7 +5940,8 @@ void idGameLocal::RadiusPushClipModel( idEntity* inflictor, const idVec3 &origin
 
 				//trace_t trace;
 				//gameLocal.GetLocalPlayer()->Collide()
-				suckee->Killed(suckee, gameLocal.GetLocalPlayer(), 10000.0f, idVec3(0, 0, 0), 0);
+				suckee->GetPhysics()->ApplyImpulse(0, clipModel->GetOrigin(), push*impulse);
+				//suckee->Killed(suckee, gameLocal.GetLocalPlayer(), 10000.0f, idVec3(0, 0, 0), 0);
 			}
 		}
 		//yur mum 2 end
