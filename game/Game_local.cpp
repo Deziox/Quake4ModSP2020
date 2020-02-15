@@ -5921,7 +5921,6 @@ void idGameLocal::RadiusPushClipModel( idEntity* inflictor, const idVec3 &origin
 	const traceModelPoly_t *poly;
 	idFixedWinding w;
 	idVec3 v, localOrigin, center, impulse;
-
 	trm = clipModel->GetTraceModel();
 	if ( !trm || 1 ) {
 		impulse = clipModel->GetAbsBounds().GetCenter() - origin;
@@ -5930,10 +5929,27 @@ void idGameLocal::RadiusPushClipModel( idEntity* inflictor, const idVec3 &origin
 // abahr: removed because z isn't always up
 		//impulse.z += 1.0f;
 		//impulse = idVec3( 0.0, 0.0, 1.0 );
+		//yur mum 2 begin
+		if (inflictor->GetClassname() == gameLocal.GetLocalPlayer()->GetClassname()){
+			gameLocal.Printf("RadiusPushClipModel test %s\t%s\n", clipModel->GetEntity()->GetEntityDefName(), clipModel->GetEntity()->GetClassname());
+			gameLocal.Printf("local idPlayer is sucking\n");
+
+			idEntity* suckee = clipModel->GetEntity();
+			if (suckee->GetSuperclass() == "idAI"){
+				gameLocal.Printf("superclass %s\n",suckee->GetSuperclass());
+
+				//trace_t trace;
+				//gameLocal.GetLocalPlayer()->Collide()
+				suckee->Killed(suckee, gameLocal.GetLocalPlayer(), 10000.0f, idVec3(0, 0, 0), 0);
+			}
+		}
+		//yur mum 2 end
 		clipModel->GetEntity()->ApplyImpulse( inflictor, clipModel->GetId(), clipModel->GetOrigin(), push * impulse, true );
 // RAVEN END
 		return;
 	}
+
+	gameLocal.Printf("wth do we ever get here??");
 
 	localOrigin = ( origin - clipModel->GetOrigin() ) * clipModel->GetAxis().Transpose();
 	for ( i = 0; i < trm->numPolys; i++ ) {

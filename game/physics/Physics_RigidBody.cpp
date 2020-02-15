@@ -736,6 +736,10 @@ void idPhysics_RigidBody::SetFriction( const float linear, const float angular, 
 	linearFriction = linear;
 	angularFriction = angular;
 	contactFriction = contact;
+	//yur mum 1
+	linearFriction = 0.01f;
+	angularFriction = 0.01f;
+	contactFriction = 0.01f;
 }
 
 /*

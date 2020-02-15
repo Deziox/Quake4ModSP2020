@@ -766,7 +766,7 @@ windowDef Desktop
 			}
 			windowDef main_b9
 			{
-				rect	0,322,413,52
+				rect	104,257,413,52
 				visible	1
 				background	"gfx/guis/mainmenu/b1_dark"
 				matcolor	1,1,1,0
@@ -801,7 +801,7 @@ windowDef Desktop
 			}
 			windowDef main_b9_corner
 			{
-				rect	32,341,12,12
+				rect	136,276,12,12
 				visible	1
 				background	"gfx/guis/mainmenu/corner"
 				matcolor	0.564,0.603,0.286,0
@@ -844,7 +844,7 @@ windowDef Desktop
 			}
 			windowDef main_t_b9
 			{
-				rect	44,334,314,23
+				rect	151,269,314,23
 				visible	1
 				forecolor	1,1,1,0
 				text	"#str_200005"
@@ -18986,7 +18986,7 @@ windowDef Desktop
 
 		windowDef main_b_returnmp
 		{
-			rect	24,214,333,26
+			rect	114,132,333,26
 			visible	0
 
 			onMouseEnter {
@@ -19065,7 +19065,7 @@ windowDef Desktop
 		}
 		windowDef main_b_savegame
 		{
-			rect	24,214,333,26
+			rect	111,130,333,26
 			visible	0
 
 			onMouseEnter {
@@ -19192,7 +19192,7 @@ windowDef Desktop
 		}
 		windowDef main_b_quitcurrent
 		{
-			rect	24,274,333,26
+			rect	78,197,333,26
 			visible	0
 
 			onMouseEnter {
@@ -19308,7 +19308,7 @@ windowDef Desktop
 		}
 		windowDef main_b_return
 		{
-			rect	24,334,333,26
+			rect	133,268,333,26
 			visible	0
 
 			onMouseEnter {

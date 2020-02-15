@@ -6122,9 +6122,27 @@ void idPlayer::Weapon_Combat( void ) {
 		}
 		//yur mum 6 begin
 		else if ((usercmd.buttons & BUTTON_VOICECHAT)){
-			gameLocal.Printf("SUCC TEST");
+			//gameLocal.Printf("SUCC TEST");
 			//yur dad gameLocal.push.ClipPush looks like there is a ray trace version of the push, this seems like a better version of the push.
-			gameLocal.RadiusPush(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + idVec3(0,20.0f,-10.0f), 200.0f, -10000.0f, this, this, 1.0f, false);			
+			gameLocal.RadiusPush(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + idVec3(0, 40.0f, 40.0f), 70.0f, -10000.0f, this, this, 1.0f, false);
+			/*
+			idDict dict;
+			idVec3 dir;
+
+			dict.SetFloat("penetrate", 1.0f);
+			dict.SetBool("hitscanTint", true);
+			dict.SetFloat("range", 100.0f);
+			dict.SetFloat("trace_size", 1.0f);
+
+			dir = gameLocal.GetLocalPlayer()->viewAxis[0];
+			dir.Normalize();
+			idVec3 pOrigin = gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin();
+			idEntity* suckee = gameLocal.HitScan(dict, pOrigin, dir, pOrigin, this, true,0.0f);
+			if (suckee){
+			//gameLocal.Error("suckee test: %s",suckee->GetEntityDefName());
+			gameLocal.Printf("%s\t", suckee->GetEntityDefName());
+			suckee->GetPhysics()->AddForce(0, suckee->GetPhysics()->GetOrigin(), -dir * 1000.0f);
+			}*/
 		}
 		//yur mum 6 end
  	}
