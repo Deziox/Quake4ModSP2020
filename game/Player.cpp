@@ -6126,7 +6126,10 @@ void idPlayer::Weapon_Combat( void ) {
 			idVec3 dir;
 			dir = gameLocal.GetLocalPlayer()->viewAxis[0];
 			dir.Normalize();
-			gameLocal.RadiusPush(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir*40.0f + idVec3(0,0,40.0f), 70.0f, -10000.0f, this, this, 1.0f, false);
+			gameLocal.RadiusPush(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir*40.0f + idVec3(0,0,60.0f), 100.0f, -10000.0f, this, this, 1.0f, false);
+			//trace_t trace;
+			//gameLocal.Translation(self,trace,)
+			//gameLocal.GetLocalPlayer()->Collide(trace,)
 			/*
 			idDict dict;
 			idVec3 dir;
@@ -6594,6 +6597,8 @@ idPlayer::Collide
 bool idPlayer::Collide( const trace_t &collision, const idVec3 &velocity ) {
 	idEntity *other;
 	other = gameLocal.entities[ collision.c.entityNum ];
+
+	//gameLocal.Printf("Collide test: %s\t%s\n", other->GetClassname(), other->GetSuperclass());
 
 	// allow client-side prediction of item collisions for simple client effects
 	if ( gameLocal.isClient && !other->IsType( idItem::GetClassType() ) ) {

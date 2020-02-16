@@ -1597,6 +1597,7 @@ void idPhysics_Player::MovePlayer( int msec ) {
 	}
 	else {
 		// airborne
+		//yur dad
 		idPhysics_Player::AirMove();
 	}
 
