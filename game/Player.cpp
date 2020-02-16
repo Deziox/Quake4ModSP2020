@@ -6131,18 +6131,35 @@ void idPlayer::Weapon_Combat( void ) {
 	pfl.weaponFired = false;
  	if ( !influenceActive ) {
  		if ( ( usercmd.buttons & BUTTON_ATTACK ) && !weaponGone ) {
+			idDict dict;
+			idVec3 dir;
+			dir = gameLocal.GetLocalPlayer()->viewAxis[0];
+			dir.Normalize();
 			switch (abilityID){
 			case 0:
 				gameLocal.Printf("Fire\n");
+				idEntity *ent;
+				idProjectile *proj;
+				dict = gameLocal.FindEntityDef("projectile_blaster_charged", false)->dict;
+				gameLocal.SpawnEntityDef(dict, &ent, false);
+
+				proj = static_cast<idProjectile*>(ent);
+				proj->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), dir, gameLocal.GetLocalPlayer(), extraProjPassEntity);
+				proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin()+dir*100.0f + idVec3(0,0,30.0f), dir, dir*20.0f, 5.0f, 100.0f);
+				AddProjectilesFired(1);
+				gameLocal.Printf("projectile: %s\t%s\n", spawnArgs.GetString("def_fire"),ent->GetClassname());
 				break;
 			case 1:
 				gameLocal.Printf("Lightning\n");
+				gameLocal.Printf("projectile: %s\n", spawnArgs.GetString("def_lightning"));
 				break;
 			case 2:
 				gameLocal.Printf("Water\n");
+				gameLocal.Printf("projectile: %s\n", spawnArgs.GetString("def_water"));
 				break;
 			case 3:
 				gameLocal.Printf("Plasma\n");
+				gameLocal.Printf("projectile: %s\n", spawnArgs.GetString("def_plasma"));
 				break;
 			case 4:
 				gameLocal.Printf("Stone\n");

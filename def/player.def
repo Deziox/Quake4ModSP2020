@@ -664,6 +664,11 @@ entityDef player_marine
 	"weapon9_best"						"0"
 	"weapon9_cycle"						"1"
 
+	"def_fire"							"fire"
+	"def_lightning"						"lightning"
+	"def_water"							"water"
+	"def_plasma"						"plasma"
+
 	"mtr_wound"						"textures/decals/hurt02"
 	"mtr_splat"						"textures/decals/dsplat2"
 	"mtr_splat2"						"textures/decals/dsplat5"
