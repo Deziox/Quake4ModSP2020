@@ -194,6 +194,9 @@ const idVec4 marineHitscanTint( 0.69f, 1.0f, 0.4f, 1.0f );
 const idVec4 stroggHitscanTint( 1.0f, 0.5f, 0.0f, 1.0f );
 const idVec4 defaultHitscanTint( 0.4f, 1.0f, 0.4f, 1.0f );
 
+bool hasAbility = false;
+int abilityID = -1;
+
 /*
 ==============
 idInventory::Clear
@@ -6045,6 +6048,19 @@ idUserInterface *idPlayer::ActiveGui( void ) {
 	return focusUI;
 }
 
+/*yur mum
+===============
+idPlayer::GiveRandomAbility
+===============
+*/
+void idPlayer::GiveRandomAbility(void){
+	if (hasAbility){
+		return;
+	}
+	hasAbility = true;
+	abilityID = gameLocal.random.RandomInt(5);
+}
+
 /*
 ===============
 idPlayer::Weapon_Combat
@@ -6115,13 +6131,32 @@ void idPlayer::Weapon_Combat( void ) {
 	pfl.weaponFired = false;
  	if ( !influenceActive ) {
  		if ( ( usercmd.buttons & BUTTON_ATTACK ) && !weaponGone ) {
- 			FireWeapon();
+			switch (abilityID){
+			case 0:
+				gameLocal.Printf("Fire\n");
+				break;
+			case 1:
+				gameLocal.Printf("Lightning\n");
+				break;
+			case 2:
+				gameLocal.Printf("Water\n");
+				break;
+			case 3:
+				gameLocal.Printf("Plasma\n");
+				break;
+			case 4:
+				gameLocal.Printf("Stone\n");
+				break;
+			default:
+				FireWeapon();
+				break;
+			}
  		} else if ( oldButtons & BUTTON_ATTACK ) {
  			pfl.attackHeld = false;
  			weapon->EndAttack();
 		}
 		//yur mum 6 begin
-		else if ((usercmd.buttons & BUTTON_VOICECHAT)){
+		else if ((usercmd.buttons & BUTTON_INGAMESTATS) && !hasAbility){
 			//gameLocal.Printf("SUCC TEST");
 			idVec3 dir;
 			dir = gameLocal.GetLocalPlayer()->viewAxis[0];
@@ -6148,6 +6183,10 @@ void idPlayer::Weapon_Combat( void ) {
 			gameLocal.Printf("%s\t", suckee->GetEntityDefName());
 			suckee->GetPhysics()->AddForce(0, suckee->GetPhysics()->GetOrigin(), -dir * 1000.0f);
 			}*/
+		}
+		else if ((usercmd.buttons & BUTTON_STRAFE)){
+			hasAbility = false;
+			abilityID = -1;
 		}
 		//yur mum 6 end
  	}

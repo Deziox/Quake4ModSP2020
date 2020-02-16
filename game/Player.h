@@ -434,6 +434,8 @@ public:
 	void					Spawn( void );
 	void					Think( void );
 
+	void					GiveRandomAbility(void);
+
 	// save games
 	void					Save( idSaveGame *savefile ) const;					// archives object for save game file
 	void					Restore( idRestoreGame *savefile );					// unarchives object from save game file
