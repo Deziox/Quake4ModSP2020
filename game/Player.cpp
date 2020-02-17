@@ -6140,12 +6140,12 @@ void idPlayer::Weapon_Combat( void ) {
 				gameLocal.Printf("Fire\n");
 				idEntity *ent;
 				idProjectile *proj;
-				dict = gameLocal.FindEntityDef("projectile_blaster_charged", false)->dict;
+				dict = gameLocal.FindEntityDef("projectile_fire", false)->dict;
 				gameLocal.SpawnEntityDef(dict, &ent, false);
 
 				proj = static_cast<idProjectile*>(ent);
 				proj->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), dir, gameLocal.GetLocalPlayer(), extraProjPassEntity);
-				proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin()+dir*100.0f + idVec3(0,0,30.0f), dir, dir*20.0f, 5.0f, 100.0f);
+				proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin()+dir*100.0f + idVec3(0,0,30.0f), dir, dir*20.0f, 0.0f, 100.0f);
 				AddProjectilesFired(1);
 				gameLocal.Printf("projectile: %s\t%s\n", spawnArgs.GetString("def_fire"),ent->GetClassname());
 				break;

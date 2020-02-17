@@ -312,6 +312,28 @@ entityDef projectile_blaster_charged
 	"def_splash_damage"			"damage_blastersplash_charged"
 }
 
+//yur mum
+entityDef projectile_fire
+{
+	"inherit"					"projectile_blaster"
+
+	"mins"						"-8 -8 -8"
+	"maxs"						"8 8 8"
+
+	"velocity"					"2000 0 0"
+
+	"fx_fly"					"effects/weapons/blaster/charged/fly.fx"
+	"fx_impact"					"effects/weapons/blaster/charged/impact_default.fx"
+	"fx_impact_flesh"			"effects/weapons/blaster/impact_flesh_charged.fx"
+	"fx_impact_monstermetal"	"effects/weapons/blaster/impact_monstermetal_charged.fx"
+	"fx_impact_electronics"		"effects/weapons/machinegun/impact_electronics.fx"
+	"fx_impact_armor"			"effects/weapons/machinegun/impact_armor.fx"
+
+
+	"def_damage"				"damage_blaster_charged"
+	"def_splash_damage"			"damage_blastersplash_charged"
+}
+
 //--------------------------------------------------------------------------------------------------------------------
 // Damage
 //-------------------------------------------------------------------------------------------------------------------0
