@@ -6133,13 +6133,14 @@ void idPlayer::Weapon_Combat( void ) {
  		if ( ( usercmd.buttons & BUTTON_ATTACK ) && !weaponGone ) {
 			idDict dict;
 			idVec3 dir;
+			trace_t tr;
+			idEntity *ent;
+			idProjectile *proj;
 			dir = gameLocal.GetLocalPlayer()->viewAxis[0];
 			dir.Normalize();
 			switch (abilityID){
 			case 0:
 				gameLocal.Printf("Fire\n");
-				idEntity *ent;
-				idProjectile *proj;
 				dict = gameLocal.FindEntityDef("projectile_fire", false)->dict;
 				gameLocal.SpawnEntityDef(dict, &ent, false);
 
@@ -6150,7 +6151,9 @@ void idPlayer::Weapon_Combat( void ) {
 				gameLocal.Printf("projectile: %s\t%s\n", spawnArgs.GetString("def_fire"),ent->GetClassname());
 				break;
 			case 1:
-				gameLocal.Printf("Lightning\n");
+				gameLocal.Printf("Lightning\n"); 
+				//gameLocal.HitScan();
+				
 				gameLocal.Printf("projectile: %s\n", spawnArgs.GetString("def_lightning"));
 				break;
 			case 2:
@@ -6159,10 +6162,31 @@ void idPlayer::Weapon_Combat( void ) {
 				break;
 			case 3:
 				gameLocal.Printf("Plasma\n");
+				for (int i = 0; i < 8; i++){
+					dict = gameLocal.FindEntityDef("projectile_blaster_charged", false)->dict;
+					gameLocal.SpawnEntityDef(dict, &ent, false);
+
+					proj = static_cast<idProjectile*>(ent);
+					proj->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), dir, gameLocal.GetLocalPlayer(), extraProjPassEntity);
+					proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir*100.0f + idVec3(0, 0, 30.0f), dir, dir*20.0f, 5.0f, 100.0f);
+					
+					dir.x = (cos(45 * (i + 1)*dir.x) - sin(45 * (i + 1)*dir.y));
+					dir.y = (sin(45 * (i + 1)*dir.x) + cos(45 * (i + 1)*dir.y));
+					AddProjectilesFired(1);
+				}
 				gameLocal.Printf("projectile: %s\n", spawnArgs.GetString("def_plasma"));
 				break;
 			case 4:
 				gameLocal.Printf("Stone\n");
+				if (!gameLocal.GetLocalPlayer()->GetPhysics()->HasGroundContacts()){
+					gameLocal.Printf("RockyBrownBoa\n");
+					idVec3 g = gameLocal.GetLocalPlayer()->GetPhysics()->GetGravity();
+					g.x = 0.0f;
+					g.y = 0.0f;
+					g.z = gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin().z;
+					gameLocal.GetLocalPlayer()->GetPhysics()->SetLinearVelocity(g*-100.0f,0);
+					//gameLocal.GetLocalPlayer()->GetPhysics()->SetGravity(g * 2000.0f);
+				}
 				break;
 			default:
 				FireWeapon();
