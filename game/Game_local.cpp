@@ -5688,6 +5688,7 @@ void idGameLocal::RadiusDamage( const idVec3 &origin, idEntity *inflictor, idEnt
 	modelTrace_t	result;
 	idVec3 		v, damagePoint, dir;
 	int			i, damage, radius, push;
+	bool			playerIgnore;
 
 	const idDict *damageDef = FindEntityDefDict( damageDefName, false );
 	if ( !damageDef ) {
@@ -5699,6 +5700,8 @@ void idGameLocal::RadiusDamage( const idVec3 &origin, idEntity *inflictor, idEnt
 	damageDef->GetInt( "radius", "50", radius );
 	damageDef->GetInt( "push", va( "%d", damage * 100 ), push );
 	damageDef->GetFloat( "attackerDamageScale", "0.5", attackerDamageScale );
+	damageDef->GetBool("playerIgnore", "0", playerIgnore);
+
 	if( gameLocal.isMultiplayer ) {
 		damageDef->GetFloat( "attackerPushScale", "2", attackerPushScale );
 	} else {
@@ -5795,6 +5798,7 @@ void idGameLocal::RadiusDamage( const idVec3 &origin, idEntity *inflictor, idEnt
 			}
 
 			dir.Normalize();
+
 			ent->Damage( inflictor, attacker, dir, damageDefName, damageScale, CLIPMODEL_ID_TO_JOINT_HANDLE(ent->GetPhysics()->GetClipModel()->GetId()) );
 
 			// for stats, count the first 

@@ -6145,25 +6145,35 @@ void idPlayer::Weapon_Combat( void ) {
 				gameLocal.SpawnEntityDef(dict, &ent, false);
 
 				proj = static_cast<idProjectile*>(ent);
-				proj->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), dir, gameLocal.GetLocalPlayer(), extraProjPassEntity);
-				proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin()+dir*100.0f + idVec3(0,0,30.0f), dir, dir*20.0f, 0.0f, 100.0f);
+				proj->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), dir, 0, extraProjPassEntity);
+				proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin()+dir + idVec3(0,0,10.0f), dir, dir*20.0f, 0.0f, 100.0f);
 				AddProjectilesFired(1);
 				gameLocal.Printf("projectile: %s\t%s\n", spawnArgs.GetString("def_fire"),ent->GetClassname());
 				break;
 			case 1:
 				gameLocal.Printf("Lightning\n"); 
-				//gameLocal.HitScan();
-				
+
 				gameLocal.Printf("projectile: %s\n", spawnArgs.GetString("def_lightning"));
 				break;
 			case 2:
-				gameLocal.Printf("Water\n");
+				gameLocal.Printf("Ice\n");
+
+				dict = gameLocal.FindEntityDef("projectile_ice", false)->dict;
+				gameLocal.SpawnEntityDef(dict, &ent, false);
+
+				dir.Normalize();
+
+				proj = static_cast<idProjectile*>(ent);
+				proj->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), dir, 0, extraProjPassEntity);
+				proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir + idVec3(0, 0, 10.0f), dir, dir, 0.0f, 100.0f);
+				AddProjectilesFired(1);
+				
 				gameLocal.Printf("projectile: %s\n", spawnArgs.GetString("def_water"));
 				break;
 			case 3:
 				gameLocal.Printf("Plasma\n");
-				for (int i = 0; i < 8; i++){
-					dict = gameLocal.FindEntityDef("projectile_blaster_charged", false)->dict;
+				for (int i = 0; i < 16; i++){
+					dict = gameLocal.FindEntityDef("projectile_plasma", false)->dict;
 					gameLocal.SpawnEntityDef(dict, &ent, false);
 
 					float randAngle = 45 + gameLocal.random.RandomInt(20);
@@ -6174,7 +6184,7 @@ void idPlayer::Weapon_Combat( void ) {
 
 					proj = static_cast<idProjectile*>(ent);
 					proj->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), dir, gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer());
-					proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir* 50.0f, dir, dir * 5.0f, 5.0f, 100.0f);
+					proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir + idVec3(0, 0, 20.0f + gameLocal.random.RandomInt(20)), dir, dir * 5.0f, 5.0f, 100.0f);
 					AddProjectilesFired(1);
 				}
 				gameLocal.Printf("projectile: %s\n", spawnArgs.GetString("def_plasma"));

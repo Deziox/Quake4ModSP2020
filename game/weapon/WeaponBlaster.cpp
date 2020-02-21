@@ -437,7 +437,7 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 				//args.Set("classname", "player_strogg");
 				//player->SetModel("player_strogg");
 				//player->UpdateModel();
-				player->UpdateModelSetup(true);
+				//player->UpdateModelSetup(true);
 				//gameLocal.SpawnEntityDef(args);
 				//yur mum 2 end
 			} else {
