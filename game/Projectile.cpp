@@ -646,6 +646,7 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
 		idEntity* trigger = gameLocal.entities[ collision.c.entityNum ];
 		
 		if( trigger ) {
+
 			if ( trigger->RespondsTo( EV_Touch ) || trigger->HasSignal( SIG_TOUCH ) ) {
 				
 				hitTeleporter = true;
@@ -781,6 +782,13 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
 		// Pass through water
 		return false;
 	} else if ( canDamage && ent->IsType( idActor::GetClassType() ) ) {
+		//yur mum 1 begin
+		if (ent->IsType(idPlayer::GetClassType())){
+			gameLocal.Printf("detonated test\n");
+			return false;
+		}
+		//yur mum 1 end
+
 		if ( !projectileFlags.detonate_on_actor ) {
 			return false;
 		}

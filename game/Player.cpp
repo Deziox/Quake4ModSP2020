@@ -6166,12 +6166,15 @@ void idPlayer::Weapon_Combat( void ) {
 					dict = gameLocal.FindEntityDef("projectile_blaster_charged", false)->dict;
 					gameLocal.SpawnEntityDef(dict, &ent, false);
 
+					float randAngle = 45 + gameLocal.random.RandomInt(20);
+					dir.x = (cos(randAngle * (i + 1)*dir.y) - sin(randAngle * (i + 1)*dir.x));
+					dir.y = (sin(randAngle * (i + 1)*dir.y) + cos(randAngle * (i + 1)*dir.x));
+
+					dir.Normalize();
+
 					proj = static_cast<idProjectile*>(ent);
-					proj->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), dir, gameLocal.GetLocalPlayer(), extraProjPassEntity);
-					proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir*100.0f + idVec3(0, 0, 30.0f), dir, dir*20.0f, 5.0f, 100.0f);
-					
-					dir.x = (cos(45 * (i + 1)*dir.x) - sin(45 * (i + 1)*dir.y));
-					dir.y = (sin(45 * (i + 1)*dir.x) + cos(45 * (i + 1)*dir.y));
+					proj->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), dir, gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer());
+					proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir* 50.0f, dir, dir * 5.0f, 5.0f, 100.0f);
 					AddProjectilesFired(1);
 				}
 				gameLocal.Printf("projectile: %s\n", spawnArgs.GetString("def_plasma"));
@@ -6203,27 +6206,6 @@ void idPlayer::Weapon_Combat( void ) {
 			dir = gameLocal.GetLocalPlayer()->viewAxis[0];
 			dir.Normalize();
 			gameLocal.RadiusPush(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir*40.0f + idVec3(0,0,60.0f), 100.0f, -10000.0f, this, this, 1.0f, false);
-			//trace_t trace;
-			//gameLocal.Translation(self,trace,)
-			//gameLocal.GetLocalPlayer()->Collide(trace,)
-			/*
-			idDict dict;
-			idVec3 dir;
-
-			dict.SetFloat("penetrate", 1.0f);
-			dict.SetBool("hitscanTint", true);
-			dict.SetFloat("range", 100.0f);
-			dict.SetFloat("trace_size", 1.0f);
-
-			dir = gameLocal.GetLocalPlayer()->viewAxis[0];
-			dir.Normalize();
-			idVec3 pOrigin = gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin();
-			idEntity* suckee = gameLocal.HitScan(dict, pOrigin, dir, pOrigin, this, true,0.0f);
-			if (suckee){
-			//gameLocal.Error("suckee test: %s",suckee->GetEntityDefName());
-			gameLocal.Printf("%s\t", suckee->GetEntityDefName());
-			suckee->GetPhysics()->AddForce(0, suckee->GetPhysics()->GetOrigin(), -dir * 1000.0f);
-			}*/
 		}
 		else if ((usercmd.buttons & BUTTON_STRAFE)){
 			hasAbility = false;
