@@ -27,6 +27,8 @@ const idEventDef EV_Fizzle( "<fizzle>", NULL );
 const idEventDef EV_RadiusDamage( "<radiusdmg>", "E" );
 const idEventDef EV_ResidualDamage ( "<residualdmg>", "E" );
 
+bool collided = false;
+
 CLASS_DECLARATION( idEntity, idProjectile )
 	EVENT( EV_Explode,			idProjectile::Event_Explode )
 	EVENT( EV_Fizzle,			idProjectile::Event_Fizzle )
@@ -621,6 +623,10 @@ void idProjectile::UpdateVisualAngles() {
 idProjectile::Collide
 =================
 */
+bool idProjectile::Collided(void){
+	return collided;
+}
+
 bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity ) {
 	bool dummy = false;
 	return Collide( collision, velocity, dummy );
@@ -783,7 +789,7 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
 		return false;
 	} else if ( canDamage && ent->IsType( idActor::GetClassType() ) ) {
 		//yur mum 1 begin
-		if (ent->IsType(idPlayer::GetClassType())){
+		if (ent->IsType(idPlayer::GetClassType()) && gameLocal.GetLocalPlayer()->IsHard()){
 			gameLocal.Printf("detonated test\n");
 			return false;
 		}
@@ -898,6 +904,13 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
 				}
 			}	
 // RAVEN END
+
+			if (spawnArgs.GetBool("freezing_trigger", "0")){
+				if (ent->IsType(idAI::GetClassType())){
+					idAI * ai_ent = static_cast<idAI* >(ent);
+					ai_ent->Freeze();
+				}
+			}
 
 			ent->Damage(this, owner, dir, damageDefName, damagePower, hitJoint);
 			

@@ -587,6 +587,7 @@ public:
 
 	void					InitNonPersistentSpawnArgs		( void );	
 
+	void					Freeze(void);
 	/*
 	===============================================================================
 									Speaking & Chatter

@@ -196,6 +196,11 @@ const idVec4 defaultHitscanTint( 0.4f, 1.0f, 0.4f, 1.0f );
 
 bool hasAbility = false;
 int abilityID = -1;
+idProjectile *iceShot;
+int lastIceTime = 0;
+int ICESHOT_TIMER = 400;
+bool isHard = false;
+bool midAirRock = false;
 
 /*
 ==============
@@ -6066,6 +6071,15 @@ void idPlayer::GiveRandomAbility(void){
 idPlayer::Weapon_Combat
 ===============
 */
+bool idPlayer::IsHard(void){
+	return isHard;
+}
+
+/*
+===============
+idPlayer::Weapon_Combat
+===============
+*/
 void idPlayer::Weapon_Combat( void ) {
 	
  	if ( influenceActive || !weaponEnabled || gameLocal.inCinematic || privateCameraView ) {
@@ -6138,6 +6152,9 @@ void idPlayer::Weapon_Combat( void ) {
 			idProjectile *proj;
 			dir = gameLocal.GetLocalPlayer()->viewAxis[0];
 			dir.Normalize();
+			//debug
+			//abilityID = 4;
+
 			switch (abilityID){
 			case 0:
 				gameLocal.Printf("Fire\n");
@@ -6163,10 +6180,14 @@ void idPlayer::Weapon_Combat( void ) {
 
 				dir.Normalize();
 
-				proj = static_cast<idProjectile*>(ent);
-				proj->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), dir, 0, extraProjPassEntity);
-				proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir + idVec3(0, 0, 10.0f), dir, dir, 0.0f, 100.0f);
-				AddProjectilesFired(1);
+				if((gameLocal.time - lastIceTime) > ICESHOT_TIMER){
+					gameLocal.Printf("iceshot test 2 %d\n", (gameLocal.time - lastIceTime));
+					iceShot = static_cast<idProjectile*>(ent);
+					iceShot->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), dir, 0, extraProjPassEntity);
+					iceShot->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir + idVec3(0, 0, 30.0f), dir, dir*0.1f, 0.0f, 1.0f);
+					AddProjectilesFired(1);
+					lastIceTime = gameLocal.time;
+				}
 				
 				gameLocal.Printf("projectile: %s\n", spawnArgs.GetString("def_water"));
 				break;
@@ -6191,14 +6212,27 @@ void idPlayer::Weapon_Combat( void ) {
 				break;
 			case 4:
 				gameLocal.Printf("Stone\n");
+				isHard = true;
 				if (!gameLocal.GetLocalPlayer()->GetPhysics()->HasGroundContacts()){
+					midAirRock = true;
 					gameLocal.Printf("RockyBrownBoa\n");
 					idVec3 g = gameLocal.GetLocalPlayer()->GetPhysics()->GetGravity();
 					g.x = 0.0f;
 					g.y = 0.0f;
 					g.z = gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin().z;
 					gameLocal.GetLocalPlayer()->GetPhysics()->SetLinearVelocity(g*-100.0f,0);
-					//gameLocal.GetLocalPlayer()->GetPhysics()->SetGravity(g * 2000.0f);
+				}
+				else{
+					if (midAirRock){
+						midAirRock = false;
+						gameLocal.RadiusDamage(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(),
+							gameLocal.GetLocalPlayer(),
+							gameLocal.GetLocalPlayer(),
+							gameLocal.GetLocalPlayer()->GetDamageEntity(),
+							gameLocal.GetLocalPlayer(),
+							"damage_rockybrownboa", 1.0);
+						gameLocal.RadiusPush(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), 100.0f, 5000.0f, gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer(), 1.0f, false);
+					}
 				}
 				break;
 			default:
@@ -6211,15 +6245,20 @@ void idPlayer::Weapon_Combat( void ) {
 		}
 		//yur mum 6 begin
 		else if ((usercmd.buttons & BUTTON_INGAMESTATS) && !hasAbility){
-			//gameLocal.Printf("SUCC TEST");
+			//gameLocal.Printf("SUCC TEST %d\n",gameLocal.time);
 			idVec3 dir;
 			dir = gameLocal.GetLocalPlayer()->viewAxis[0];
 			dir.Normalize();
 			gameLocal.RadiusPush(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir*40.0f + idVec3(0,0,60.0f), 100.0f, -10000.0f, this, this, 1.0f, false);
+			isHard = false;
 		}
 		else if ((usercmd.buttons & BUTTON_STRAFE)){
+			isHard = false;
 			hasAbility = false;
 			abilityID = -1;
+		}
+		else{
+			isHard = false;
 		}
 		//yur mum 6 end
  	}
@@ -9069,6 +9108,9 @@ void idPlayer::Move( void ) {
 	idVec3 oldVelocity;
 	idVec3 pushVelocity;
 
+	//yur mum
+	if (isHard && gameLocal.GetLocalPlayer()->GetPhysics()->HasGroundContacts()) return;
+
 	// save old origin and velocity for crashlanding
 	oldOrigin = physicsObj.GetOrigin();
 	oldVelocity = physicsObj.GetLinearVelocity();
@@ -10236,7 +10278,7 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 		return;
 	}
 
- 	if ( damageDef->dict.GetBool( "ignore_player" ) ) {
+ 	if ( damageDef->dict.GetBool( "ignore_player" )) {
  		return;
  	}
 
