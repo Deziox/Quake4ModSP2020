@@ -202,6 +202,8 @@ int ICESHOT_TIMER = 400;
 bool isHard = false;
 bool midAirRock = false;
 
+int LIGHTNING_TIMER = 100;
+int lastLightningTime = 0;
 /*
 ==============
 idInventory::Clear
@@ -6169,6 +6171,17 @@ void idPlayer::Weapon_Combat( void ) {
 				break;
 			case 1:
 				gameLocal.Printf("Lightning\n"); 
+
+				dict = gameLocal.FindEntityDef("projectile_lightning", false)->dict;
+				gameLocal.SpawnEntityDef(dict, &ent, false);
+
+				if ((gameLocal.time - lastLightningTime) > LIGHTNING_TIMER){
+					proj = static_cast<idProjectile*>(ent);
+					proj->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), dir, 0, extraProjPassEntity);
+					proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir - (dir * 2.0f) + idVec3(0, 0, 30.0f), dir, dir, 0.0f, 1.0f);
+					AddProjectilesFired(1);
+					lastLightningTime = gameLocal.time;
+				}
 
 				gameLocal.Printf("projectile: %s\n", spawnArgs.GetString("def_lightning"));
 				break;
