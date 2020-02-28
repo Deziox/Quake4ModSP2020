@@ -5946,12 +5946,18 @@ void idGameLocal::RadiusPushClipModel( idEntity* inflictor, const idVec3 &origin
 				//gameLocal.GetLocalPlayer()->Collide()
 				suckee->GetPhysics()->ApplyImpulse(0, clipModel->GetOrigin(), push*impulse);
 				gameLocal.Printf("distance %s\t%f\n", suckee->GetClassname(), abs(suckee->GetPhysics()->GetOrigin().Dist2(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin())));
-				if ((abs(suckee->GetPhysics()->GetOrigin().Dist2(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin()))) < 2000.0f){
+				if ((abs(suckee->GetPhysics()->GetOrigin().Dist2(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin()))) < 3000.0f){
 					gameLocal.Printf("murder test\n");
 					gameLocal.GetLocalPlayer()->GiveRandomAbility();
 					suckee->Killed(suckee, gameLocal.GetLocalPlayer(), 10000.0f, idVec3(0, 0, 0), 0);
-					//suckee->PostEventMS(&EV_Remove, 0);
+					suckee->PostEventMS(&EV_Remove, 0);
 					gameLocal.GetLocalPlayer()->AddFood(50);
+				}
+			}
+			else{
+				if ((abs(suckee->GetPhysics()->GetOrigin().Dist2(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin()))) < 3000.0f){
+					suckee->PostEventMS(&EV_Remove, 0);
+					gameLocal.GetLocalPlayer()->AddFood(10);
 				}
 			}
 		}

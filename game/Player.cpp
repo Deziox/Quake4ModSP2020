@@ -9552,11 +9552,7 @@ void idPlayer::Think( void ) {
 #endif
 	//yur mum
 	if (hunger <= 0){
-		if (hunger < -999){
-			hunger = -999;
-		}
-
-		//yur dadKilled(gameLocal)
+		Damage(this, this, idVec3(0, 0, 0), "damage_starved", 1, 0);
 	}
 
  	// Dont do any thinking if we are in modview
@@ -9750,7 +9746,7 @@ void idPlayer::Think( void ) {
 	}
 // RAVEN END
 
-	hunger -= (gameLocal.time % 20 == 0 ? 1 : 0);
+	hunger -= (gameLocal.time % 20 == 0 && hunger > 0 ? 1 : 0);
 
 	Move();
 
@@ -10525,7 +10521,7 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 			}
 		}
 
-		if ( health <= 0) {
+		if ( health <= 0 || hunger <= 0) {
 
 			if ( health < -999 ) {
 				health = -999;
@@ -11120,7 +11116,7 @@ void idPlayer::GetViewPos( idVec3 &origin, idMat3 &axis ) const {
 	idAngles angles;
 
 	// if dead, fix the angle and don't add any kick
-	if ( health <= 0 ) {
+	if ( health <= 0 || hunger <= 0) {
 		angles.yaw = viewAngles.yaw;
 		angles.roll = 40;
 		angles.pitch = -15;
@@ -11159,7 +11155,7 @@ idPlayer::CalculateFirstPersonView
 ===============
 */
 void idPlayer::CalculateFirstPersonView( void ) {
-	if ( ( pm_modelView.GetInteger() == 1 ) || ( ( pm_modelView.GetInteger() == 2 ) && ( health <= 0 ) ) ) {
+	if ( ( pm_modelView.GetInteger() == 1 ) || ( ( pm_modelView.GetInteger() == 2 ) && ( health <= 0 || hunger <= 0) ) ) {
 		//	Displays the view from the point of view of the "camera" joint in the player model
 
 		idMat3 axis;
@@ -12747,7 +12743,7 @@ void idPlayer::ReadFromSnapshot( const idBitMsgDelta &msg ) {
 		}
 	}
 
-	if ( oldHealth > 0 && health <= 0 ) {
+	if ( oldHealth > 0 && (health <= 0 || hunger <= 0)) {
  		if ( stateHitch ) {
  			// so we just hide and don't show a death skin
  			UpdateDeathSkin( true );
