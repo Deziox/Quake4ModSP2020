@@ -198,12 +198,15 @@ bool hasAbility = false;
 int abilityID = -1;
 idProjectile *iceShot;
 int lastIceTime = 0;
-int ICESHOT_TIMER = 400;
+int ICESHOT_TIMER = 700;
 bool isHard = false;
 bool midAirRock = false;
 
 int LIGHTNING_TIMER = 100;
 int lastLightningTime = 0;
+
+int hunger = 500;
+int MAX_HUNGER = 500;
 /*
 ==============
 idInventory::Clear
@@ -1509,6 +1512,8 @@ idPlayer::Init
 void idPlayer::Init( void ) {
 	const char			*value;
 	
+	hunger = MAX_HUNGER;
+
 	noclip					= false;
 	godmode					= false;
 	godmodeDamage			= 0;
@@ -1725,6 +1730,8 @@ void idPlayer::Init( void ) {
  	isChatting = false;
 
 	SetInitialHud();
+	//yur mum
+	hud->SetStateInt("abilityid", 0);
 
 	emote = PE_NONE;
 
@@ -1777,6 +1784,8 @@ void idPlayer::Init( void ) {
 		teamDoublerPending = false;
 		teamDoubler = PlayEffect( "fx_doubler", renderEntity.origin, renderEntity.axis, true );
 	}
+
+
 }
 
 /*
@@ -3407,7 +3416,16 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	int temp;
 	
 	assert ( _hud );
-
+	
+	//yur mum begin
+	temp = _hud->State().GetInt("player_hunger", "-1");
+	if (temp != hunger){
+		_hud->SetStateInt("player_hunger", hunger);
+		//_hud->HandleNamedEvent("updateHunger");
+		gameLocal.Printf("kirby hunger: %d", temp);
+	}
+	
+	//yur mum end
 	temp = _hud->State().GetInt ( "player_health", "-1" );
 	if ( temp != health ) {		
 		_hud->SetStateInt   ( "player_healthDelta", temp == -1 ? 0 : (temp - health) );
@@ -3731,6 +3749,7 @@ void idPlayer::DrawHUD( idUserInterface *_hud ) {
 
 	// don't draw main hud in spectator (only mphud)
 	if ( !spectating && !gameDebug.IsHudActive( DBGHUD_ANY ) ) {
+		
 		// weapon targeting crosshair
 		if ( !GuiActive() ) {
 			if ( weapon && weapon->GetZoomGui( ) && zoomed ) {
@@ -6068,6 +6087,18 @@ void idPlayer::GiveRandomAbility(void){
 	abilityID = gameLocal.random.RandomInt(5);
 }
 
+/*yur mum
+===============
+idPlayer::AddFood
+===============
+*/
+void idPlayer::AddFood(int food){
+	hunger += food;
+	if (hunger > MAX_HUNGER){
+		hunger = MAX_HUNGER;
+	}
+}
+
 /*
 ===============
 idPlayer::Weapon_Combat
@@ -6170,7 +6201,7 @@ void idPlayer::Weapon_Combat( void ) {
 				gameLocal.Printf("projectile: %s\t%s\n", spawnArgs.GetString("def_fire"),ent->GetClassname());
 				break;
 			case 1:
-				gameLocal.Printf("Lightning\n"); 
+				gameLocal.Printf("Lightning\n");
 
 				dict = gameLocal.FindEntityDef("projectile_lightning", false)->dict;
 				gameLocal.SpawnEntityDef(dict, &ent, false);
@@ -6179,6 +6210,19 @@ void idPlayer::Weapon_Combat( void ) {
 					proj = static_cast<idProjectile*>(ent);
 					proj->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin(), dir, 0, extraProjPassEntity);
 					proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir - (dir * 2.0f) + idVec3(0, 0, 30.0f), dir, dir, 0.0f, 1.0f);
+					
+					dict = gameLocal.FindEntityDef("projectile_lightning_mini", false)->dict;
+					gameLocal.SpawnEntityDef(dict, &ent, false);
+					proj = static_cast<idProjectile*>(ent);
+
+					dir.Normalize();
+					
+					for (int i = 1; i <= 10; i++){
+
+						proj->Create(gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir * 100.0f * (i/10), dir, 0, extraProjPassEntity);
+						proj->Launch(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin() + dir * 4.0f * i + idVec3(0, 0, 30.0f), dir, dir*1.0f, 0.0f, 1.0f);
+
+					}
 					AddProjectilesFired(1);
 					lastLightningTime = gameLocal.time;
 				}
@@ -6202,7 +6246,7 @@ void idPlayer::Weapon_Combat( void ) {
 					lastIceTime = gameLocal.time;
 				}
 				
-				gameLocal.Printf("projectile: %s\n", spawnArgs.GetString("def_water"));
+				gameLocal.Printf("projectile: %s\n", spawnArgs.GetString("def_ice"));
 				break;
 			case 3:
 				gameLocal.Printf("Plasma\n");
@@ -6269,10 +6313,22 @@ void idPlayer::Weapon_Combat( void ) {
 			isHard = false;
 			hasAbility = false;
 			abilityID = -1;
+			hud->SetStateInt("abilityid", 0);
 		}
 		else{
 			isHard = false;
 		}
+
+		if (!hasAbility){
+			gameLocal.Printf("abilityid: %d\n", hud->GetStateInt("abilityid", "-1"));
+			hud->SetStateInt("abilityid", 0);
+		}
+		else{
+			gameLocal.Printf("abilityid: %d\n", hud->GetStateInt("abilityid", "-1"));
+			hud->SetStateInt("abilityid", 1);
+		}
+
+		hud->HandleNamedEvent("updateAbility");
 		//yur mum 6 end
  	}
 
@@ -9450,7 +9506,7 @@ Called every tic for each player
 */
 void idPlayer::Think( void ) {
 	renderEntity_t *headRenderEnt;
- 
+
 	if ( talkingNPC ) {
 		if ( !talkingNPC.IsValid() ) {
 			talkingNPC = NULL;
@@ -9478,6 +9534,14 @@ void idPlayer::Think( void ) {
 		g_crosshairColor.ClearModified();
 	}
 #endif
+	//yur mum
+	if (hunger <= 0){
+		if (hunger < -999){
+			hunger = -999;
+		}
+
+		//yur dadKilled(gameLocal)
+	}
 
  	// Dont do any thinking if we are in modview
 	if ( gameLocal.editors & EDITOR_MODVIEW || gameEdit->PlayPlayback() ) {
@@ -9669,6 +9733,8 @@ void idPlayer::Think( void ) {
 		UpdateGravity();
 	}
 // RAVEN END
+
+	hunger -= (gameLocal.time % 50 == 0 ? 1 : 0);
 
 	Move();
 
@@ -10443,11 +10509,12 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 			}
 		}
 
-		if ( health <= 0 ) {
+		if ( health <= 0) {
 
 			if ( health < -999 ) {
 				health = -999;
 			}
+			
 
  			isTelefragged = damageDef->dict.GetBool( "telefrag" );
  

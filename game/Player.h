@@ -435,6 +435,7 @@ public:
 	void					Think( void );
 
 	void					GiveRandomAbility(void);
+	void					AddFood(int food);
 
 	// save games
 	void					Save( idSaveGame *savefile ) const;					// archives object for save game file

@@ -5950,6 +5950,8 @@ void idGameLocal::RadiusPushClipModel( idEntity* inflictor, const idVec3 &origin
 					gameLocal.Printf("murder test\n");
 					gameLocal.GetLocalPlayer()->GiveRandomAbility();
 					suckee->Killed(suckee, gameLocal.GetLocalPlayer(), 10000.0f, idVec3(0, 0, 0), 0);
+					//suckee->PostEventMS(&EV_Remove, 0);
+					gameLocal.GetLocalPlayer()->AddFood(50);
 				}
 			}
 		}
