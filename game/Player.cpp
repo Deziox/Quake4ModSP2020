@@ -4131,6 +4131,8 @@ bool idPlayer::Give( const char *statname, const char *value, bool dropped ) {
 	}
 
 	if ( !idStr::Icmp( statname, "health" ) ) {
+		hunger = MAX_HUNGER;//yur mum
+		/*
 		if ( health >= boundaryHealth ) {
 			return false;
 		}
@@ -4140,7 +4142,7 @@ bool idPlayer::Give( const char *statname, const char *value, bool dropped ) {
  			if ( health > boundaryHealth ) {
  				health = boundaryHealth;
  			}
-		}
+		}*/
 	} else if ( !idStr::Icmp( statname, "bonushealth" ) ) {
 		// allow health over max health
 		if ( health >= boundaryHealth * 2 ) {
@@ -4863,72 +4865,75 @@ const char* idPlayer::GetArenaPowerupString ( void ) {
 idPlayer::UpdatePowerUps
 ==============
 */
-void idPlayer::UpdatePowerUps( void ) {
+void idPlayer::UpdatePowerUps(void) {
 	int i;
 	int index;
 	int wearoff;
 
 	idUserInterface *hud = idPlayer::hud;
-	if ( !gameLocal.GetLocalPlayer() ) {
+	if (!gameLocal.GetLocalPlayer()) {
 		// server netdemo
-		if ( gameLocal.GetDemoState() == DEMO_PLAYING && gameLocal.IsServerDemo() && gameLocal.GetDemoFollowClient() == entityNumber ) {
+		if (gameLocal.GetDemoState() == DEMO_PLAYING && gameLocal.IsServerDemo() && gameLocal.GetDemoFollowClient() == entityNumber) {
 			hud = gameLocal.GetDemoHud();
 		}
-	} else {
+	}
+	else {
 		// if updating the hud of a followed client
 		idPlayer *p = gameLocal.GetLocalPlayer();
-		if ( p->spectating && p->spectator == entityNumber ) {
-			assert( p->hud && p->mphud );
+		if (p->spectating && p->spectator == entityNumber) {
+			assert(p->hud && p->mphud);
 			hud = p->hud;
 		}
 	}
 
 	wearoff = -1;
-	if ( hud ) {
-		hud->HandleNamedEvent( "clearPowerups" );
+	if (hud) {
+		hud->HandleNamedEvent("clearPowerups");
 	}
 
-	for ( i = 0, index = 0; i < POWERUP_MAX; i++ ) {
+	for (i = 0, index = 0; i < POWERUP_MAX; i++) {
 		// Do we have this powerup?
-		if ( !(inventory.powerups & ( 1 << i ) ) ) {
+		if (!(inventory.powerups & (1 << i))) {
 			continue;
 		}
-			
-		if ( inventory.powerupEndTime[i] > gameLocal.time || inventory.powerupEndTime[i] == -1 ) {
+
+		if (inventory.powerupEndTime[i] > gameLocal.time || inventory.powerupEndTime[i] == -1) {
 			// If there is still time remaining on the powerup then update the hud		
-			if ( hud ) {
+			if (hud) {
 				// Play the wearoff sound for the powerup that is closest to wearing off
-				if ( ( wearoff == -1 || inventory.powerupEndTime[i] < inventory.powerupEndTime[wearoff] ) && inventory.powerupEndTime[i] != -1 ) {
+				if ((wearoff == -1 || inventory.powerupEndTime[i] < inventory.powerupEndTime[wearoff]) && inventory.powerupEndTime[i] != -1) {
 					wearoff = i;
 				}
 
 				// for flags, set the powerup_flag_* variables, which give us a special pulsing flag display
-				if( i == POWERUP_CTF_MARINEFLAG || i == POWERUP_CTF_STROGGFLAG || i == POWERUP_CTF_ONEFLAG ) {
-					hud->SetStateInt( "powerup_flag_visible", 1 );
-				} else {
-					hud->SetStateString ( va("powerup%d_icon", index ), GetPowerupDef(i)->dict.GetString ( "inv_icon" ) );
-					hud->SetStateString ( va("powerup%d_time", index ), inventory.powerupEndTime[i] == -1 ? "" : va( "%d" , (int)MS2SEC(inventory.powerupEndTime[i] - gameLocal.time) + 1 ) );
-					hud->SetStateInt ( va( "powerup%d_visible", index ), 1 );
+				if (i == POWERUP_CTF_MARINEFLAG || i == POWERUP_CTF_STROGGFLAG || i == POWERUP_CTF_ONEFLAG) {
+					hud->SetStateInt("powerup_flag_visible", 1);
+				}
+				else {
+					hud->SetStateString(va("powerup%d_icon", index), GetPowerupDef(i)->dict.GetString("inv_icon"));
+					hud->SetStateString(va("powerup%d_time", index), inventory.powerupEndTime[i] == -1 ? "" : va("%d", (int)MS2SEC(inventory.powerupEndTime[i] - gameLocal.time) + 1));
+					hud->SetStateInt(va("powerup%d_visible", index), 1);
 					index++;
 				}
 			}
 
 			continue;
-		} else if ( inventory.powerupEndTime[ i ] != -1 && gameLocal.isServer ) {
+		}
+		else if (inventory.powerupEndTime[i] != -1 && gameLocal.isServer) {
 			// This particular powerup needs to respawn in a special way.
-			if ( i == POWERUP_DEADZONE ) {
+			if (i == POWERUP_DEADZONE) {
 				gameLocal.mpGame.GetGameState()->SpawnDeadZonePowerup();
 			}
 			// Powerup time has run out so take it away from the player
-			ClearPowerup( i );
+			ClearPowerup(i);
 		}
 	}
 
 	// PLay wear off sound?
-	if ( gameLocal.isNewFrame && wearoff != -1 ) {
-		if ( (inventory.powerupEndTime[wearoff] - gameLocal.time) < POWERUP_BLINKS * POWERUP_BLINK_TIME ) {
-			if ( (inventory.powerupEndTime[wearoff] - gameLocal.time) / POWERUP_BLINK_TIME != ( inventory.powerupEndTime[wearoff] - gameLocal.previousTime ) / POWERUP_BLINK_TIME ) {
-				StartSound ( "snd_powerup_wearoff", SND_CHANNEL_POWERUP, 0, false, NULL );
+	if (gameLocal.isNewFrame && wearoff != -1) {
+		if ((inventory.powerupEndTime[wearoff] - gameLocal.time) < POWERUP_BLINKS * POWERUP_BLINK_TIME) {
+			if ((inventory.powerupEndTime[wearoff] - gameLocal.time) / POWERUP_BLINK_TIME != (inventory.powerupEndTime[wearoff] - gameLocal.previousTime) / POWERUP_BLINK_TIME) {
+				StartSound("snd_powerup_wearoff", SND_CHANNEL_POWERUP, 0, false, NULL);
 			}
 		}
 	}
@@ -4939,6 +4944,7 @@ void idPlayer::UpdatePowerUps( void ) {
 // squirrel: health regen only applies if you have positive health
 		if( health > 0 ) {
 			if ( PowerUpActive ( POWERUP_REGENERATION ) || PowerUpActive ( POWERUP_GUARD ) ) {
+
 				int healthBoundary = inventory.maxHealth; // health will regen faster under this value, slower above
 				int healthTic = 15;
 
@@ -10523,7 +10529,9 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 		}
 
 		int oldHealth = health;
-		health -= damage;
+		
+		//yur mum
+		health -= (isHard ? 0 : damage);
 
 		GAMELOG_ADD ( va("player%d_damage_taken", entityNumber ), damage );
 		GAMELOG_ADD ( va("player%d_damage_%s", entityNumber, damageDefName), damage );

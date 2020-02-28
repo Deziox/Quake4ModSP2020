@@ -5956,8 +5956,10 @@ void idGameLocal::RadiusPushClipModel( idEntity* inflictor, const idVec3 &origin
 			}
 			else if(suckee->GetSuperclass() != "idTrigger"){
 				if ((abs(suckee->GetPhysics()->GetOrigin().Dist2(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin()))) < 4000.0f){
-					suckee->PostEventMS(&EV_Remove, 0);
-					gameLocal.GetLocalPlayer()->AddFood(20);
+					if (suckee->GetClassname() != "idLight" || suckee->GetClassname() != "idDoor"){
+						suckee->PostEventMS(&EV_Remove, 0);
+						gameLocal.GetLocalPlayer()->AddFood(20);
+					}
 				}
 			}
 		}
