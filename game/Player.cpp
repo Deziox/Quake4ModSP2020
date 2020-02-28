@@ -3428,6 +3428,12 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	//yur mum end
 	temp = _hud->State().GetInt ( "player_health", "-1" );
 	if ( temp != health ) {		
+		if (temp > health){
+			isHard = false;
+			hasAbility = false;
+			abilityID = -1;
+			hud->SetStateInt("abilityid", 0);
+		}
 		_hud->SetStateInt   ( "player_healthDelta", temp == -1 ? 0 : (temp - health) );
 		_hud->SetStateInt	( "player_health", health < -100 ? -100 : health );
 		_hud->SetStateFloat	( "player_healthpct", idMath::ClampFloat ( 0.0f, 1.0f, (float)health / (float)inventory.maxHealth ) );
@@ -3436,6 +3442,14 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 		
 	temp = _hud->State().GetInt ( "player_armor", "-1" );
 	if ( temp != inventory.armor ) {
+
+		if (temp > inventory.armor){
+			isHard = false;
+			hasAbility = false;
+			abilityID = -1;
+			hud->SetStateInt("abilityid", 0);
+		}
+
 		_hud->SetStateInt ( "player_armorDelta", temp == -1 ? 0 : (temp - inventory.armor) );
 		_hud->SetStateInt ( "player_armor", inventory.armor );
 		_hud->SetStateFloat	( "player_armorpct", idMath::ClampFloat ( 0.0f, 1.0f, (float)inventory.armor / (float)inventory.maxarmor ) );
@@ -9746,7 +9760,9 @@ void idPlayer::Think( void ) {
 	}
 // RAVEN END
 
-	hunger -= (gameLocal.time % 20 == 0 && hunger > 0 ? 1 : 0);
+	if (!hasAbility){
+		hunger -= (gameLocal.time % 20 == 0 && hunger > 0 ? 1 : 0);
+	}
 
 	Move();
 
