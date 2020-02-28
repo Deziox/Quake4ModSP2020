@@ -6320,12 +6320,28 @@ void idPlayer::Weapon_Combat( void ) {
 		}
 
 		if (!hasAbility){
-			gameLocal.Printf("abilityid: %d\n", hud->GetStateInt("abilityid", "-1"));
 			hud->SetStateInt("abilityid", 0);
 		}
 		else{
-			gameLocal.Printf("abilityid: %d\n", hud->GetStateInt("abilityid", "-1"));
-			hud->SetStateInt("abilityid", 1);
+			switch (abilityID){
+			case 0:
+				hud->SetStateInt("abilityid", 1);
+				break;
+			case 1:
+				hud->SetStateInt("abilityid", 5);
+				break;
+			case 2:
+				hud->SetStateInt("abilityid", 2);
+				break;
+			case 3:
+				hud->SetStateInt("abilityid", 3);
+				break;
+			case 4:
+				hud->SetStateInt("abilityid", 4);
+				break;
+			default:
+				hud->SetStateInt("abilityid", 0);
+			}
 		}
 
 		hud->HandleNamedEvent("updateAbility");
@@ -9734,7 +9750,7 @@ void idPlayer::Think( void ) {
 	}
 // RAVEN END
 
-	hunger -= (gameLocal.time % 50 == 0 ? 1 : 0);
+	hunger -= (gameLocal.time % 20 == 0 ? 1 : 0);
 
 	Move();
 
