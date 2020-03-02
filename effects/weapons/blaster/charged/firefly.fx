@@ -12,12 +12,13 @@ effect effects/weapons/blaster/charged/firefly
 		line
 		{
 			duration	5,5
-			material	"gfx/effects/weapons/blaster_fly"
+			material	"gfx/effects/weapons/blaster_fly_red"
 
 			start
 			{
 				size { point 4 }
-				offset { point 12,0,0 }
+				offset{ point 12, 0, 0 }
+				tint{point 1.0,0,0}
 				length { point -25,0,0 }
 			}
 
@@ -43,7 +44,7 @@ effect effects/weapons/blaster/charged/firefly
 		line
 		{
 			duration	5,5
-			material	"gfx/effects/weapons/blaster_fly"
+			material	"gfx/effects/weapons/blaster_fly_red"
 
 			start
 			{
@@ -64,7 +65,7 @@ effect effects/weapons/blaster/charged/firefly
 		{
 			duration	0.1,0.1
 			blend	add
-			material	"gfx/effects/weapons/blaster_fly"
+			material	"gfx/effects/weapons/blaster_fly_red"
 			generatedOriginNormal
 
 			start
@@ -104,7 +105,8 @@ effect effects/weapons/blaster/charged/firefly
 				position { point -4,0,0 }
 				size { point 8,8 }
 				offset { point 8,0,0 }
-				rotate { box 0,0.5 }
+				rotate{ box 0, 0.5 }
+				tint{point 1.0,0,0}
 			}
 
 			motion
@@ -133,8 +135,9 @@ effect effects/weapons/blaster/charged/firefly
 			start
 			{
 				angle { box 0,0,0,0.444444,0.444444,0.444444 }
-				size { line 8,8,10,10 }
-				tint { point 0.552941,0.768628,0.921569 }
+				size{ line 8, 8, 10, 10 }
+				//tint { point 0.552941,0.768628,0.921569 }
+				tint{point 1.0,0,0}
 				fade { point 0.3 }
 				offset { box 0,-8,-4,0,8,4 }
 			}

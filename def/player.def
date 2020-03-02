@@ -664,11 +664,6 @@ entityDef player_marine
 	"weapon9_best"						"0"
 	"weapon9_cycle"						"1"
 
-	"def_fire"							"fire"
-	"def_lightning"						"lightning"
-	"def_water"							"water"
-	"def_plasma"						"plasma"
-
 	"mtr_wound"						"textures/decals/hurt02"
 	"mtr_splat"						"textures/decals/dsplat2"
 	"mtr_splat2"						"textures/decals/dsplat5"
@@ -710,7 +705,7 @@ entityDef player_marine
 	"respawn_delay"						"1.7"		// minimum delay for respawning after death
 
 	// stats
-	"health"						"100"
+	"health"						"10000"
 	"maxhealth"						"100"
 	"armor"							"0"
 	"maxarmor"						"100"
@@ -809,10 +804,77 @@ entityDef player_strogg
 	"model"								"model_player_strogg"
 
 	// stats
-	"health"							"125"
-	"maxhealth"							"125"
+	"health"							"10000"
+	"maxhealth"							"10000"
 	"armor"								"0"
 	"maxarmor"							"125"
+}
+
+//yur mum
+entityDef monster_repair_bot
+{
+	"inherit"							"player_marine"
+	"spawnclass"						"idPlayer"
+
+	// --------------------------------- Body ------------------------------------
+	"model"								"model_monster_repair_bot"
+	"remove_on_death"					"1"
+	"size"								"32 32 32"
+	"use_aas"							"aas32"
+	"flying"							"1"
+	"def_head"							""
+
+	"look_joint still"					"1.0 0.0 0"
+	"look_min"							"-90 -75 0"
+	"look_max"							"90 75 0"
+
+	"joint_eyeOffset"					"still"
+	"joint_chestOffset"					"still"
+
+	"chatter_idle_rate"					"8"
+	"chatter_combat_rate"				"8"	
+
+	"joint_hips"						"still"
+	"joint_chest"						"still"
+	"joint_head"						"still"
+
+	// --------------------------------- Combat ----------------------------------
+	"painThreshold"						"0"
+	"health"							"50"
+	"bleed"								"0"
+	"passive"							"1"
+
+	"def_attack_repair"					"hitscan_repairbot_repair"
+	"attack_repair_hitscan"				"1"
+	"attack_repair_accuracy"			"2"
+	"attack_repair_lockToJoint"			"1"
+
+	// --------------------------------- Movement ----------------------------------
+	"fly_bob_strength"					"0"
+	"fly_offset"						"0"
+	"fly_pitch_scale"					"-25"
+	"fly_roll_scale"					"25"
+	"walkRange"							"32"
+	"directionalMovement"				"1"
+	"forceRun"							"1"
+
+	// --------------------------------- Effects -------------------------------
+	"repairEffectDist"					"128"
+	"fx_repair"							"effects/monsters/repair_bot/gen_laser.fx"
+	"fx_repair_impact"					"effects/monsters/repair_bot/gen_laser_impact.fx"
+	//"fx_repair_impact_periodic"			""
+	//"impact_fx_delay_range"				""
+	"fx_death"							"effects/monsters/sentry/explosion.fx"
+
+	// --------------------------------- Sounds   -------------------------------
+	"snd_fly"							"repair_bot_hover"
+	"snd_servo"							"repair_bot_servo"
+	"snd_death"							"repair_bot_die"
+	"snd_beeps"							"repair_bot_chatter"
+	"lipsync_chatter_idle"				"repair_bot_chatter"
+	"lipsync_chatter_combat"			"repair_bot_chatter"
+	
+	"sound_bone"						"flap"
 }
 
 /*
@@ -1413,4 +1475,35 @@ entityDef player_viewweapon {
 entityDef player_animatedentity {
 	"spawnclass"				"idAnimatedEntity"
 	"networkSync"				"1"
+}
+
+entityDef damage_rockybrownboa 
+{
+	"damage"					"200"
+	"radius"					"250"
+	"knockback"					"100"
+	"push"						"5000"
+	"gib"						"0"
+
+	"deathPush"					"100"
+	"deathPushMin"				"7000 9000"
+	"deathPushMax"				"10000 12000"
+
+	"pain"						"concussive"
+
+	"cower"						"1"
+}
+
+entityDef damage_starved
+{
+	"damage"					"30000"
+	"radius"					"1"
+	"knockback"					"0"
+	"push"						"0"
+	"gib"						"0"
+
+	"deathPush"					"0"
+	"deathPushMin"				"7000 9000"
+	"deathPushMax"				"10000 12000"
+
 }
