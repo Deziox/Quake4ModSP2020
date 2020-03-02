@@ -44,6 +44,7 @@ const int PMF_TIME_WATERJUMP	= 128;		// movementTime is waterjump
 const int PMF_ALL_TIMES			= (PMF_TIME_WATERJUMP|PMF_TIME_LAND|PMF_TIME_KNOCKBACK);
 
 int c_pmove = 0;
+int jumpCount = 0;
 
 float idPhysics_Player::Pm_Accelerate( void ) {
 	return gameLocal.IsMultiplayer() ? PM_ACCELERATE_MP : PM_ACCELERATE_SP;
@@ -648,6 +649,20 @@ void idPhysics_Player::AirMove( void ) {
 	}
 // RAVEN END
 
+	//yur mum 2 begin
+	
+	if ( idPhysics_Player::CheckJump() ) {
+		// jumped away
+		if ( waterLevel > WATERLEVEL_FEET ) {
+			idPhysics_Player::WaterMove();
+		}
+		else {
+			idPhysics_Player::AirMove();
+		}
+		return;
+	}
+	//yur mum 2 end
+
 	idPhysics_Player::Friction();
 
 	scale = idPhysics_Player::CmdScale( command );
@@ -1059,7 +1074,8 @@ void idPhysics_Player::CheckGround( bool checkStuck ) {
 		groundEntityPtr = NULL;
 		return;
 	}
-
+	//yur mum 6
+	jumpCount = 0;
 	groundMaterial = groundTrace.c.material;
 	groundEntityPtr = gameLocal.entities[ groundTrace.c.entityNum ];
 
@@ -1274,6 +1290,8 @@ idPhysics_Player::CheckJump
 bool idPhysics_Player::CheckJump( void ) {
 	idVec3 addVelocity;
 
+	
+
 	if ( command.upmove < 10 ) {
 		// not holding jump
 		return false;
@@ -1295,8 +1313,18 @@ bool idPhysics_Player::CheckJump( void ) {
 
 	addVelocity = 2.0f * maxJumpHeight * -gravityVector;
 	addVelocity *= idMath::Sqrt( addVelocity.Normalize() );
-	current.velocity += addVelocity;
-
+	//yur mum 4 begin
+	if (jumpCount < 5){
+		jumpCount++;
+		gameLocal.Printf("Jump Count %d", jumpCount);
+		if (current.velocity.z < 0.0f){
+			current.velocity = addVelocity * 1.4f;
+		}
+		else{
+			current.velocity += addVelocity;
+		}
+	}
+	//yur mum 4 end
 // RAVEN BEGIN
 // bdube: crouch slide, nick maggoire is awesome
 	current.crouchSlideTime = 0;
@@ -1569,6 +1597,7 @@ void idPhysics_Player::MovePlayer( int msec ) {
 	}
 	else {
 		// airborne
+		//yur dad
 		idPhysics_Player::AirMove();
 	}
 
@@ -1611,7 +1640,7 @@ int idPhysics_Player::GetWaterType( void ) const {
 idPhysics_Player::HasJumped
 ================
 */
-bool idPhysics_Player::HasJumped( void ) const {
+bool idPhysics_Player::HasJumped(void) const {
 	return ( ( current.movementFlags & PMF_JUMPED ) != 0 );
 }
 
@@ -1883,6 +1912,7 @@ void idPhysics_Player::SetDebugLevel( bool set ) {
 idPhysics_Player::Evaluate
 ================
 */
+//yur dad
 bool idPhysics_Player::Evaluate( int timeStepMSec, int endTimeMSec ) {
 	idVec3 masterOrigin, oldOrigin;
 	idMat3 masterAxis;

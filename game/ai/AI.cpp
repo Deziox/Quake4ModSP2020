@@ -27,6 +27,9 @@ const char* aiTalkMessageString [ ] = {
 
 static const float AI_SIGHTDELAYSCALE	= 5000.0f;			// Full sight delay at 5 seconds or more of not seeing enemy
 
+bool frozen = false;
+int FREEZE_TIME = 4000;
+int lastFreezeTime = 0;
 
 /*
 ===============================================================================
@@ -1132,6 +1135,16 @@ bool idAI::DoDormantTests ( void ) {
 
 /*
 =====================
+idAI::Freeze
+=====================
+*/
+void idAI::Freeze(void) {
+	if (frozen) return;
+	frozen = true;
+}
+
+/*
+=====================
 idAI::Think
 =====================
 */
@@ -1142,6 +1155,18 @@ void idAI::Think( void ) {
 		return;
 	}
 
+	//yur mum 1 begin
+	if (frozen){
+		if ((gameLocal.time - lastFreezeTime) <= FREEZE_TIME){
+			return;
+		}
+		frozen = false;
+	}
+	else{
+		lastFreezeTime = gameLocal.time;
+	}
+	//yur mum 1 end
+	
 	// Simple think this frame?
 	aifl.simpleThink = aiManager.IsSimpleThink ( this );
 
@@ -1200,7 +1225,6 @@ void idAI::Think( void ) {
 
 			// update state machine
 			UpdateStates();
-
 			// run all movement commands
 			Move();
 

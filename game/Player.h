@@ -434,6 +434,10 @@ public:
 	void					Spawn( void );
 	void					Think( void );
 
+	void					GiveRandomAbility(void);
+	void					AddFood(int food);
+	int						GetPowerID(void);
+
 	// save games
 	void					Save( idSaveGame *savefile ) const;					// archives object for save game file
 	void					Restore( idRestoreGame *savefile );					// unarchives object from save game file
@@ -795,6 +799,7 @@ public:
 	void					SetCash( float newCashAmount );
 	void					ResetCash();
 // RITUAL END
+	bool					IsHard(void);
 
 protected:
 	void					SetupHead( const char* modelKeyName = "", idVec3 headOffset = idVec3(0, 0, 0) );
@@ -1013,6 +1018,7 @@ private:
 	void					LookAtKiller( idEntity *inflictor, idEntity *attacker );
 
 	void					StopFiring( void );
+	void					Succ(void);
 	void					FireWeapon( void );
 	void					Weapon_Combat( void );
 	void					Weapon_NPC( void );

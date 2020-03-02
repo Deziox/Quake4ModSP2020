@@ -5688,6 +5688,7 @@ void idGameLocal::RadiusDamage( const idVec3 &origin, idEntity *inflictor, idEnt
 	modelTrace_t	result;
 	idVec3 		v, damagePoint, dir;
 	int			i, damage, radius, push;
+	bool			playerIgnore;
 
 	const idDict *damageDef = FindEntityDefDict( damageDefName, false );
 	if ( !damageDef ) {
@@ -5699,6 +5700,8 @@ void idGameLocal::RadiusDamage( const idVec3 &origin, idEntity *inflictor, idEnt
 	damageDef->GetInt( "radius", "50", radius );
 	damageDef->GetInt( "push", va( "%d", damage * 100 ), push );
 	damageDef->GetFloat( "attackerDamageScale", "0.5", attackerDamageScale );
+	damageDef->GetBool("playerIgnore", "0", playerIgnore);
+
 	if( gameLocal.isMultiplayer ) {
 		damageDef->GetFloat( "attackerPushScale", "2", attackerPushScale );
 	} else {
@@ -5795,6 +5798,7 @@ void idGameLocal::RadiusDamage( const idVec3 &origin, idEntity *inflictor, idEnt
 			}
 
 			dir.Normalize();
+
 			ent->Damage( inflictor, attacker, dir, damageDefName, damageScale, CLIPMODEL_ID_TO_JOINT_HANDLE(ent->GetPhysics()->GetClipModel()->GetId()) );
 
 			// for stats, count the first 
@@ -5921,7 +5925,6 @@ void idGameLocal::RadiusPushClipModel( idEntity* inflictor, const idVec3 &origin
 	const traceModelPoly_t *poly;
 	idFixedWinding w;
 	idVec3 v, localOrigin, center, impulse;
-
 	trm = clipModel->GetTraceModel();
 	if ( !trm || 1 ) {
 		impulse = clipModel->GetAbsBounds().GetCenter() - origin;
@@ -5930,10 +5933,43 @@ void idGameLocal::RadiusPushClipModel( idEntity* inflictor, const idVec3 &origin
 // abahr: removed because z isn't always up
 		//impulse.z += 1.0f;
 		//impulse = idVec3( 0.0, 0.0, 1.0 );
+		//yur mum 2 begin
+		if (inflictor->GetClassname() == gameLocal.GetLocalPlayer()->GetClassname()){
+			gameLocal.Printf("RadiusPushClipModel test %s\t%s\t%s\n", clipModel->GetEntity()->GetEntityDefName(), clipModel->GetEntity()->GetClassname(),clipModel->GetEntity()->GetSuperclass());
+			gameLocal.Printf("local idPlayer is sucking\n");
+
+			idEntity* suckee = clipModel->GetEntity();
+			if (suckee->GetSuperclass() == "idAI"){
+				gameLocal.Printf("superclass %s\n",suckee->GetSuperclass());
+
+				//trace_t trace;
+				//gameLocal.GetLocalPlayer()->Collide()
+				suckee->GetPhysics()->ApplyImpulse(0, clipModel->GetOrigin(), push*impulse);
+				gameLocal.Printf("distance %s\t%f\n", suckee->GetClassname(), abs(suckee->GetPhysics()->GetOrigin().Dist2(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin())));
+				if ((abs(suckee->GetPhysics()->GetOrigin().Dist2(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin()))) < 4000.0f){
+					gameLocal.Printf("murder test\n");
+					gameLocal.GetLocalPlayer()->GiveRandomAbility();
+					suckee->Killed(suckee, gameLocal.GetLocalPlayer(), 10000.0f, idVec3(0, 0, 0), 0);
+					suckee->PostEventMS(&EV_Remove, 0);
+					gameLocal.GetLocalPlayer()->AddFood(75);
+				}
+			}
+			else if(suckee->GetSuperclass() != "idTrigger"){
+				if ((abs(suckee->GetPhysics()->GetOrigin().Dist2(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin()))) < 4000.0f){
+					if (suckee->GetClassname() != "idLight" || suckee->GetClassname() != "idDoor"){
+						suckee->PostEventMS(&EV_Remove, 0);
+						gameLocal.GetLocalPlayer()->AddFood(20);
+					}
+				}
+			}
+		}
+		//yur mum 2 end
 		clipModel->GetEntity()->ApplyImpulse( inflictor, clipModel->GetId(), clipModel->GetOrigin(), push * impulse, true );
 // RAVEN END
 		return;
 	}
+
+	gameLocal.Printf("wth do we ever get here??");
 
 	localOrigin = ( origin - clipModel->GetOrigin() ) * clipModel->GetAxis().Transpose();
 	for ( i = 0; i < trm->numPolys; i++ ) {

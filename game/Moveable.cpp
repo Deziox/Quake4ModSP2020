@@ -162,7 +162,8 @@ void idMoveable::Spawn( void ) {
 	physicsObj.SetOrigin( GetPhysics()->GetOrigin() );
 	physicsObj.SetAxis( GetPhysics()->GetAxis() );
 	physicsObj.SetBouncyness( bouncyness );
-	physicsObj.SetFriction( 0.6f, 0.6f, friction );
+	//yur mum 1
+	physicsObj.SetFriction( 0.6f, 0.6f, 0 );
 	physicsObj.SetGravity( gameLocal.GetGravity() );
 	physicsObj.SetContents( CONTENTS_SOLID );
 	physicsObj.SetClipMask( MASK_SOLID | CONTENTS_BODY | CONTENTS_CORPSE | CONTENTS_MOVEABLECLIP | CONTENTS_WATER );

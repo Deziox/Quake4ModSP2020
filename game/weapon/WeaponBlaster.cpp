@@ -398,6 +398,9 @@ rvWeaponBlaster::State_Fire
 ================
 */
 stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
+	//yur mum begin
+	idDict args;
+	//yur mum end
 	enum {
 		FIRE_INIT,
 		FIRE_WAIT,
@@ -430,8 +433,15 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 				Attack ( true, 1, spread, 0, 1.0f );
 				PlayEffect ( "fx_chargedflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames );
+				//yur mum 2 begin
+				//args.Set("classname", "player_strogg");
+				//player->SetModel("player_strogg");
+				//player->UpdateModel();
+				//player->UpdateModelSetup(true);
+				//gameLocal.SpawnEntityDef(args);
+				//yur mum 2 end
 			} else {
-				Attack ( false, 1, spread, 0, 1.0f );
+				Attack ( false, 200, spread, 0, 1.0f );
 				PlayEffect ( "fx_normalflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
 			}
