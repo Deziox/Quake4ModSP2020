@@ -436,6 +436,7 @@ public:
 
 	void					GiveRandomAbility(void);
 	void					AddFood(int food);
+	int						GetPowerID(void);
 
 	// save games
 	void					Save( idSaveGame *savefile ) const;					// archives object for save game file

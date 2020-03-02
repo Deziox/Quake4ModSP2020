@@ -207,6 +207,13 @@ int lastLightningTime = 0;
 
 int hunger = 500;
 int MAX_HUNGER = 500;
+
+bool kirbyPowerup = false;
+int powerID = -1;
+int powerUpTimer = 200;
+
+float oldSpeed = 0.0f;
+
 /*
 ==============
 idInventory::Clear
@@ -1513,6 +1520,7 @@ void idPlayer::Init( void ) {
 	const char			*value;
 	
 	hunger = MAX_HUNGER;
+	powerID = -1;
 
 	noclip					= false;
 	godmode					= false;
@@ -4131,12 +4139,17 @@ bool idPlayer::Give( const char *statname, const char *value, bool dropped ) {
 	}
 
 	if ( !idStr::Icmp( statname, "health" ) ) {
-		hunger = MAX_HUNGER;//yur mum
+		//hunger = MAX_HUNGER;//yur mum
+		amount = atoi(value);
+		gameLocal.Printf("PICKUP TEST: %d", amount);
+		
+		if (amount == 50){
+			hunger += 40;
+		}
 		/*
 		if ( health >= boundaryHealth ) {
 			return false;
 		}
- 		amount = atoi( value );
  		if ( amount ) {
  			health += amount;
  			if ( health > boundaryHealth ) {
@@ -4144,28 +4157,68 @@ bool idPlayer::Give( const char *statname, const char *value, bool dropped ) {
  			}
 		}*/
 	} else if ( !idStr::Icmp( statname, "bonushealth" ) ) {
+
+		amount = atoi(value);
+		gameLocal.Printf("BONUS HEALTH PICKUP TEST: %d", amount);
+
+		if (amount == 100){
+			hunger = MAX_HUNGER;
+		}
+		else if (amount == 5){
+			hunger += 20;
+		}
+		/*
 		// allow health over max health
 		if ( health >= boundaryHealth * 2 ) {
 			return false;
 		}
-		amount = atoi( value );
+
  		if ( amount ) {
  			health += amount;
  			if ( health > boundaryHealth * 2 ) {
  				health = boundaryHealth * 2;
  			}
-		}
+		}*/
 		nextHealthPulse = gameLocal.time + HEALTH_PULSE;
 	} else if ( !idStr::Icmp( statname, "armor" ) ) {
+		amount = atoi(value);
+		gameLocal.Printf("ARMOR PICKUP TEST: %d", amount);
+
+		if (amount == 5){
+			//shard energy drink
+			if (kirbyPowerup){
+				return false;
+			}
+			else{
+				oldSpeed = pm_speed.GetFloat();
+				pm_speed.SetFloat(oldSpeed*4.0f);
+				kirbyPowerup = true;
+				powerID = 0;
+			}
+		}
+		else if (amount == 100){
+			//treasure chest
+			GiveRandomAbility();
+		}
+		else if (amount == 50){
+			//warp star
+			if (kirbyPowerup){
+				return false;
+			}
+			else{
+				kirbyPowerup = true;
+				powerID = 1;
+			}
+		}
+		/*
 		if ( inventory.armor >= boundaryArmor ) {
 			return false;
 		}
-		amount = atoi( value );
 
 		inventory.armor += amount;
 		if ( inventory.armor > boundaryArmor ) {
 			 inventory.armor = boundaryArmor;
-		}
+		}*/
 		nextArmorPulse = gameLocal.time + ARMOR_PULSE;
 	} else if ( !idStr::Icmp( statname, "air" ) ) {
 		if ( airTics >= pm_airTics.GetInteger() ) {
@@ -4244,6 +4297,7 @@ bool idPlayer::GiveItem( idItem *item ) {
 				//to pick up the weapon in the first place!
 				arg = attr.FindKey( "weapon" );
 				if ( arg ) {
+
 					skipWeaponKey = true;
 					if ( Give( arg->GetKey(), arg->GetValue(), dropped ) ) {
 						gave = true;
@@ -4333,7 +4387,7 @@ float idPlayer::PowerUpModifier( int type ) {
 	float mod = 1.0f;
 
 	if ( PowerUpActive( POWERUP_QUADDAMAGE ) ) {
-		switch( type ) {
+		/*switch( type ) {
 			case PMOD_PROJECTILE_DAMAGE: {
 				mod *= 3.0f;
 				break;
@@ -4346,11 +4400,11 @@ float idPlayer::PowerUpModifier( int type ) {
 				mod *= 2.0f;
 				break;
 			}
-		}
+		}*/
 	}
 
 	if ( PowerUpActive( POWERUP_HASTE ) ) {
-		switch ( type ) {
+		/*switch ( type ) {
 			case PMOD_SPEED:	
 				mod *= 1.3f;
 				break;
@@ -4358,20 +4412,23 @@ float idPlayer::PowerUpModifier( int type ) {
 			case PMOD_FIRERATE:
 				mod *= 0.7f;
 				break;
-		}
+		}*/
 	}
 
 	// Arena CTF powerups
 	if( PowerUpActive( POWERUP_AMMOREGEN ) ) {
-		switch( type ) {
+		//Food +40
+
+		/*switch( type ) {
 			case PMOD_FIRERATE: {
 				mod *= 0.7f;
 				break;
 			}
-		}
+		}*/
 	}
 
 	if( PowerUpActive( POWERUP_DOUBLER ) ) {
+		/*
 		switch( type ) {
 			case PMOD_PROJECTILE_DAMAGE: {
 				mod *= 2.0f;
@@ -4381,7 +4438,7 @@ float idPlayer::PowerUpModifier( int type ) {
 				mod *= 2.0f;
 				break;
 			}
-		}
+		}*/
 	}
 
 //RITUAL BEGIN
@@ -6117,6 +6174,15 @@ void idPlayer::AddFood(int food){
 	if (hunger > MAX_HUNGER){
 		hunger = MAX_HUNGER;
 	}
+}
+
+/*yur mum
+===============
+idPlayer::GetPowerID
+===============
+*/
+int idPlayer::GetPowerID(void){
+	return powerID;
 }
 
 /*
@@ -9558,6 +9624,16 @@ void idPlayer::Think( void ) {
 		}
 	}
 
+	if (kirbyPowerup){
+		powerUpTimer -= (gameLocal.time % 20 == 0 && hunger > 0 ? 1 : 0);
+		if (powerUpTimer <= 0){
+			kirbyPowerup = false;
+			powerID = -1;
+			powerUpTimer = 200;
+			pm_speed.SetFloat(oldSpeed);
+		}
+	}
+
 	if ( !gameLocal.usercmds ) {
 		return;
 	}
@@ -10531,7 +10607,7 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 		int oldHealth = health;
 		
 		//yur mum
-		health -= (isHard ? 0 : damage);
+		health -= (isHard || powerID == 1 ? 0 : damage);
 
 		GAMELOG_ADD ( va("player%d_damage_taken", entityNumber ), damage );
 		GAMELOG_ADD ( va("player%d_damage_%s", entityNumber, damageDefName), damage );
