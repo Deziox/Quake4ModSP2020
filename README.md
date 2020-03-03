@@ -1,6 +1,6 @@
 # Quake4SP2020
 
-**STORY:**
+**STORY:** <br />
 Kirby found his way out of dreamland and into some crazy alien vs humans war woah. <br />
 But he don't care though, man's is hungry, and if he doesn't eat enough food he dies. <br />
 I guess there's no picking sides for this loveable ball of pink.<br />
