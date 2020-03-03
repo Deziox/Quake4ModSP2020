@@ -776,79 +776,79 @@ windowDef Desktop
 				rect	120,138,12,12
 				visible	1
 				background	"gfx/guis/mainmenu/corner"
-				matcolor	0.564,0.603,0.286,0.4
+				matcolor	1,0.501,0.501,0.956
 			}
 			windowDef main_b2_corner
 			{
 				rect	102,172,12,12
 				visible	1
 				background	"gfx/guis/mainmenu/corner"
-				matcolor	0.564,0.603,0.286,0.4
+				matcolor	1,0.501,0.501,1
 			}
 			windowDef main_b3_corner
 			{
 				rect	82,204,12,12
 				visible	1
 				background	"gfx/guis/mainmenu/corner"
-				matcolor	0.564,0.603,0.286,0.4
+				matcolor	1,0.501,0.501,1
 			}
 			windowDef main_b4_corner
 			{
 				rect	106,238,12,12
 				visible	1
 				background	"gfx/guis/mainmenu/corner"
-				matcolor	0.564,0.603,0.286,0.4
+				matcolor	1,0.501,0.501,1
 			}
 			windowDef main_b9_corner
 			{
 				rect	136,276,12,12
 				visible	1
 				background	"gfx/guis/mainmenu/corner"
-				matcolor	0.564,0.603,0.286,0
+				matcolor	1,0.498,0.498,0
 			}
 			windowDef main_t_b1
 			{
 				rect	138,131,314,23
 				visible	1
-				forecolor	1,1,1,0.8
+				forecolor	1,0.650,0.650,1
 				text	"#str_200000"
-				textscale	.33
+				textscale	0.33
 				font	"fonts/marine"
 			}
 			windowDef main_t_b2
 			{
 				rect	120,164,314,23
 				visible	1
-				forecolor	1,1,1,0.8
+				forecolor	1,0.650,0.650,1
 				text	"#str_200001"
-				textscale	.33
+				textscale	0.33
 				font	"fonts/marine"
 			}
 			windowDef main_t_b3
 			{
 				rect	96,198,314,23
 				visible	1
-				forecolor	1,1,1,0.8
+				forecolor	1,0.650,0.650,1
 				text	"#str_200002"
-				textscale	.33
+				textscale	0.33
 				font	"fonts/marine"
 			}
 			windowDef main_t_b4
 			{
 				rect	120,230,314,23
 				visible	1
-				forecolor	1,1,1,0.8
+				forecolor	1,0.650,0.650,1
 				text	"#str_200009"
-				textscale	.33
+				textscale	0.33
 				font	"fonts/marine"
 			}
 			windowDef main_t_b9
 			{
 				rect	151,269,314,23
 				visible	1
-				forecolor	1,1,1,0
+				forecolor	1,0.647,0.647,0
 				text	"#str_200005"
-				textscale	.33
+				textscale	0.33
 				font	"fonts/marine"
 			}
 			windowDef bg2
@@ -946,9 +946,9 @@ windowDef Desktop
 			{
 				rect	39,19,314,16
 				visible	1
-				forecolor	1,1,1,0
+				forecolor	1,0.423,0.423,0
 				text	"#str_200000"
-				textscale	.25
+				textscale	0.25
 				font	"fonts/marine"
 			}
 			windowDef new_b1
@@ -983,36 +983,36 @@ windowDef Desktop
 			{
 				rect	36,184,193,23
 				visible	1
-				forecolor	1,1,1,0.8
+				forecolor	1,0.650,0.650,1
 				text	"#str_200014"
-				textscale	.31
+				textscale	0.31
 				font	"fonts/marine"
 			}
 			windowDef new_t_b2
 			{
 				rect	36,214,193,23
 				visible	1
-				forecolor	1,1,1,0.8
+				forecolor	1,0.650,0.650,1
 				text	"#str_200015"
-				textscale	.31
+				textscale	0.31
 				font	"fonts/marine"
 			}
 			windowDef new_t_b3
 			{
 				rect	36,244,193,23
 				visible	1
-				forecolor	1,1,1,0.8
+				forecolor	1,0.650,0.650,1
 				text	"#str_200016"
-				textscale	.31
+				textscale	0.31
 				font	"fonts/marine"
 			}
 			windowDef new_t_b4
 			{
 				rect	36,274,193,23
 				visible	1
-				forecolor	1,1,1,0.8
+				forecolor	1,0.650,0.650,1
 				text	"#str_200017"
-				textscale	.31
+				textscale	0.31
 				font	"fonts/marine"
 			}
 			windowDef new_back
@@ -1033,16 +1033,16 @@ windowDef Desktop
 			{
 				rect	552,443,88,17
 				visible	1
-				forecolor	1,1,1,0
+				forecolor	1,0.650,0.650,0
 				text	"#str_200018"
-				textscale	.28
+				textscale	0.28
 				font	"fonts/marine"
 			}
 			windowDef new_diffDescript
 			{
 				rect	239,181,345,139
 				visible	1
-				forecolor	1,1,1,0.6
+				forecolor	0,0,0,1
 				text	"#str_200019"
 				textscale	0.25
 				font	"fonts/lowpixel"
@@ -1058,9 +1058,9 @@ windowDef Desktop
 			{
 				rect	265,228,198,25
 				visible	1
-				forecolor	1,1,1,0.8
+				forecolor	1,0,0,1
 				text	"#str_200020"
-				textscale	.33
+				textscale	0.33
 				font	"fonts/marine"
 			}
 			windowDef new_bstart_corner
@@ -1068,7 +1068,7 @@ windowDef Desktop
 				rect	248,232,18,18
 				visible	1
 				background	"gfx/guis/mainmenu/corner"
-				matcolor	0.564,0.603,0.286,0.4
+				matcolor	1,0.501,0.501,1
 			}
 		}
 		windowDef p_savegame
