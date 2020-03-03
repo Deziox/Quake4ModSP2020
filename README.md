@@ -31,12 +31,12 @@ Note:
 - The mod folder in the repo is moddymcmodface
 - Make sure you set the inhale and reject-ability buttons are set in settings.
 
-# TL;DR
-Kirby can succ.
-Kirby can jump 5 times in the air.
-He needs to succ if not he dies if his hunger is at zero.
-Kirby can gain abilities sucking intelligent beings.
-There's powerups on the ground, somewhere.
+# TL;DR<br />
+Kirby can succ.<br />
+Kirby can jump 5 times in the air.<br />
+He needs to succ if not he dies if his hunger is at zero.<br />
+Kirby can gain abilities sucking intelligent beings.<br />
+There's powerups on the ground, somewhere.<br />
 
 
 
