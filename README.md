@@ -34,7 +34,7 @@ Note:
 # TL;DR<br />
 Kirby can succ.<br />
 Kirby can jump 5 times in the air.<br />
-He needs to succ if not he dies if his hunger is at zero.<br />
+He needs to succ cuz he die if he too hongry.<br />
 Kirby can gain abilities sucking intelligent beings.<br />
 There's powerups on the ground, somewhere.<br />
 
