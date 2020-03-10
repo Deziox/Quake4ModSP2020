@@ -26,6 +26,7 @@ As Kirby, you can suck up and eat everything. <br />
 7) **Kirby is hungry, so there is a hunger meter which is visible on the hud.**<br />
    a) Counts down from max every 50 tics<br />
    b) If the hunger meter is at zero Kirby convulses and dies.<br />
+8) **When Kirby absorbs an idAI his model turns into the marine** <br />
 
 Note: 
 - The mod folder in the repo is moddymcmodface
