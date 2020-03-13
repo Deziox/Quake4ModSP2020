@@ -1,6 +1,6 @@
 # Quake4SP2020
 
-**STORY:** <br />
+# STORY:
 Kirby found his way out of dreamland and into some crazy alien vs humans war woah. <br />
 But he don't care though, man's is hungry, and if he doesn't eat enough food he dies. <br />
 I guess there's no picking sides for this loveable ball of pink.<br />
@@ -26,6 +26,7 @@ As Kirby, you can suck up and eat everything. <br />
 7) **Kirby is hungry, so there is a hunger meter which is visible on the hud.**<br />
    a) Counts down from max every 50 tics<br />
    b) If the hunger meter is at zero Kirby convulses and dies.<br />
+8) **When Kirby absorbs an idAI his model turns into the marine** <br />
 
 Note: 
 - The mod folder in the repo is moddymcmodface
@@ -34,7 +35,7 @@ Note:
 # TL;DR<br />
 Kirby can succ.<br />
 Kirby can jump 5 times in the air.<br />
-He needs to succ if not he dies if his hunger is at zero.<br />
+He needs to succ cuz he die if he too hongry.<br />
 Kirby can gain abilities sucking intelligent beings.<br />
 There's powerups on the ground, somewhere.<br />
 
