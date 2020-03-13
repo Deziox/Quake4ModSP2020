@@ -559,6 +559,64 @@ model model_player_strogg
 	mesh							models/characters/player/player_strogg.md5mesh
 }
 
+model model_monster_repair_bot
+{
+	mesh						models/monsters/repair_bot/mesh.md5mesh
+
+	channel	torso				( *still )
+	channel	legs				( *origin -*still )
+
+	offset						( 0 0 -24 )
+
+	anim idle					models/monsters/repair_bot/awakeidle.md5anim
+	{
+	}
+	anim idle_sleepy			models/monsters/repair_bot/idle.md5anim
+	{
+	}
+	anim idle_to_run			models/monsters/repair_bot/startmove.md5anim
+	{
+			frame	10				sound	snd_beeps
+	}
+	anim run					models/monsters/repair_bot/move_forward.md5anim
+	{
+	}
+	anim run_to_idle			models/monsters/repair_bot/stopmove.md5anim
+	{
+		frame	5					sound	snd_beeps
+	}
+	anim repair					models/monsters/repair_bot/repair.md5anim
+	{
+		frame	5					sound	snd_beeps
+//		frame 16,24,32,38,46	ai_attack		repair		l_fx
+//		frame 20,28,34,42,50	ai_attack		repair		r_fx
+	}
+	anim wakeup					models/monsters/repair_bot/wakeup.md5anim
+	{
+		frame	4					sound	snd_beeps
+	}
+	anim pain					models/monsters/repair_bot/pain.md5anim
+	{
+		frame 1					ai_disablePain
+	}
+	anim fwdpain				models/monsters/repair_bot/fwdpain.md5anim
+	{
+		frame 1					ai_disablePain
+	}
+
+	
+	anim death					models/monsters/repair_bot/death.md5anim
+	anim deadidle					models/monsters/repair_bot/deadidle.md5anim
+
+
+/*
+	anim storage				models/monsters/repair_bot/storage_level.md5anim
+	{
+		frame	22,56,64,118,126,141,151,180,209,218,226		sound	snd_servo
+	}
+*/
+}
+
 /*
 ===============================================================================
 

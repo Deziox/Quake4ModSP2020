@@ -3658,6 +3658,10 @@ void idEntity::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 	// inform the attacker that they hit someone
 	attacker->DamageFeedback( this, inflictor, damage );
 	if ( damage ) {
+
+		//yur mum
+		gameLocal.Printf("YUR MUM GEY %s\t%s\n",GetClassType(),attacker->GetClassType());
+
 		// do the damage
 		//jshepard: this is kinda important, no?
 		health -= damage;

@@ -3439,6 +3439,7 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 		if (temp > health){
 			isHard = false;
 			hasAbility = false;
+			gameLocal.GetLocalPlayer()->SetModel("model_monster_repair_bot");
 			abilityID = -1;
 			hud->SetStateInt("abilityid", 0);
 		}
@@ -6400,6 +6401,7 @@ void idPlayer::Weapon_Combat( void ) {
 			hasAbility = false;
 			abilityID = -1;
 			hud->SetStateInt("abilityid", 0);
+			gameLocal.GetLocalPlayer()->SetModel("model_monster_repair_bot");
 		}
 		else{
 			isHard = false;

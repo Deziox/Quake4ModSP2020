@@ -5949,6 +5949,8 @@ void idGameLocal::RadiusPushClipModel( idEntity* inflictor, const idVec3 &origin
 				if ((abs(suckee->GetPhysics()->GetOrigin().Dist2(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin()))) < 4000.0f){
 					gameLocal.Printf("murder test\n");
 					gameLocal.GetLocalPlayer()->GiveRandomAbility();
+					gameLocal.GetLocalPlayer()->SetModel("model_player_marine");
+					//gameLocal.GetLocalPlayer()->SetModel("model_monster_repair_bot");
 					suckee->Killed(suckee, gameLocal.GetLocalPlayer(), 10000.0f, idVec3(0, 0, 0), 0);
 					suckee->PostEventMS(&EV_Remove, 0);
 					gameLocal.GetLocalPlayer()->AddFood(75);
