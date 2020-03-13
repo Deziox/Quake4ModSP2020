@@ -30,7 +30,7 @@ As Kirby, you can suck up and eat everything. <br />
 
 Note: 
 - The mod folder in the repo is moddymcmodface
-- Make sure you set the inhale and reject-ability buttons are set in settings.
+- Make sure the inhale and reject-ability buttons are set in settings.
 
 # TL;DR<br />
 Kirby can succ.<br />
